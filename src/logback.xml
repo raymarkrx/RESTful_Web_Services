@@ -1,0 +1,65 @@
+<configuration>
+
+  <appender name="Data101ToMysqlDailyRoll" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>E:/chh/Data101ToMysql.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d [%t] %-5p [%c] - %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="Data101ToMysql" level="DEBUG">
+    <appender-ref ref="Data101ToMysqlDailyRoll"/>
+  </logger>
+
+  <appender name="Data101ToHiveDailyRoll" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>E:/chh/Data101ToHive.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>E:/chh/Data101ToHive.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d [%t] %-5p [%c] - %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="Data101ToHive" level="DEBUG">
+    <appender-ref ref="Data101ToHiveDailyRoll"/>
+  </logger>
+
+
+  <appender name="Data101ToHbaseDailyRoll" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>E:/chh/Data101ToHbase.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d [%t] %-5p [%c] - %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="Data101ToHbase" level="DEBUG">
+    <appender-ref ref="Data101ToHbaseDailyRoll"/>
+  </logger>  
+  
+   <appender name="A1" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%-4r [%t] %-5p %c - %m%n</pattern>
+    </encoder>
+  </appender>
+  
+  <root level="DEBUG">
+    <appender-ref ref="A1"/>
+  </root>
+  
+  <logger name="org.apache.zookeeper" level="ERROR"/>
+  <logger name="org.apache.storm" level="ERROR"/>
+  <logger name="storm.kafka" level="ERROR"/>
+  <logger name="backtype.storm" level="ERROR"/>
+  <logger name="kafka" level="ERROR"/>
+  
+</configuration>
