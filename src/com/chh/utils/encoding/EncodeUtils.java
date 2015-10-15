@@ -406,7 +406,7 @@ public class EncodeUtils {
 	 * @param byte[]  bytes2 --后面
 	 * @return   byte[]   bytes3  
 	 */  
-	    public  static byte[]   combineTowBytes(byte[] bytes1,byte[] bytes2){      
+	    public  static byte[]   combineTowBytes(byte[] bytes1,byte[] bytes2){
 	        byte[] bytes3 = new byte[bytes1.length+bytes2.length];  
 	          System.arraycopy(bytes1,0,bytes3,0,bytes1.length);  
 	          System.arraycopy(bytes2,0,bytes3,bytes1.length,bytes2.length);  

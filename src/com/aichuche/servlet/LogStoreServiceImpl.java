@@ -6,12 +6,18 @@
 package com.aichuche.servlet;
 
 import java.util.LinkedHashMap;
+import java.util.Properties;
 import java.util.UUID;
+
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.aichuche.servlet.KafkaMessageQueue.Dummy;
+import com.chh.utils.PropertiesUtils;
 
 // Referenced classes of package com.bianfeng.bfas.bfrd.web.servlet:
 //            KafkaMessageQueue
@@ -47,7 +53,7 @@ public class LogStoreServiceImpl
         throws Exception
     {
         String uuid = UUID.randomUUID().toString().replace("-", "");
-        String topic = "aichuche-topic";
+        String topic  = PropertiesUtils.getValue("reportdata.topic"); 
         String groupId = "aichuche-group";
         KafkaMessageQueue logCacheQueue = new KafkaMessageQueue(topic, Dummy.class, groupId);
         String value = (String)dataMap.get("1");
@@ -55,15 +61,32 @@ public class LogStoreServiceImpl
         logCacheQueue.put(value, value);
     }
     
-    public void sendToKafka(LinkedHashMap dataMap,String topic,String groupId)
-            throws Exception
-        {
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            KafkaMessageQueue logCacheQueue = new KafkaMessageQueue(topic, Dummy.class, groupId);
-        
-            String partitionKey=(String)dataMap.get("partitionKey");;//这个key跟kafka的分区有关系，指定发送到哪个partition
-            String mesg = (String)dataMap.get("mesg");
-            logCacheQueue.put(mesg, partitionKey);
+    public void sendToKafka(LinkedHashMap dataMap,String topic,String groupId)   {
+    	try{
+    		long x1= System.currentTimeMillis();
+    		
+    		String partitionKey=(String)dataMap.get("partitionKey");;//这个key跟kafka的分区有关系，指定发送到哪个partition
+    		String mesg = (String)dataMap.get("mesg");
+            
+    		//KafkaMessageQueue logCacheQueue = new KafkaMessageQueue(topic, Dummy.class, groupId);
+            //logCacheQueue.put(mesg, partitionKey);
+            
+            Properties props = new Properties();
+            props.put("serializer.class", "kafka.serializer.StringEncoder");  
+            props.put("metadata.broker.list", "180.97.232.56:9092,180.97.232.57:9092");
+            props.put("request.required.acks", "1");
+            ProducerConfig config = new ProducerConfig(props);  
+            Producer<String, String> producer = new Producer<String, String>(config);  
+            KeyedMessage<String, String> data2 = new KeyedMessage<String, String>(topic,partitionKey,mesg);  
+        	producer.send(data2);
+        	
+        	long x2= System.currentTimeMillis();
+			
+			System.out.println("==producer.send："+(x2-x1));
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+            
         }
 
     public void run()

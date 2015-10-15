@@ -9,6 +9,10 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 //import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -20,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -28,6 +33,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
@@ -49,8 +58,20 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 
 
+
+
+
+
+
+
+
+
+
+
 import com.aichuche.servlet.LogStoreServiceImpl;
 import com.aichuche.util.UtilData;
+import com.chh.utils.C3P0Utils;
+import com.chh.utils.DateUtils;
 import com.chh.utils.HttpUtil;
 import com.chh.utils.JSONUtils;
 import com.chh.utils.PrintUtils;
@@ -65,25 +86,65 @@ public class ReportDataServlet extends HttpServlet {
 	private static final Logger log = Logger.getLogger("reportData101");
 
 	private static Object obj = new Object();
-	private static String topic = new String();
 	private static String groupIdSuffix = "-group";
 	private static String delimiter = ";";// 分隔符
 	private static String groupId = new String();
 	private static String CHARSET_UTF8 = "UTF-8";
 
+	private static String topic = new String();
+    private static String brokerList;
 	private static ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
-
-	private static String yyyyMMdd = "[0-9]{8}";
+	private static Properties properties = new Properties();
+	private static ProducerConfig config = null;  
+	private static Producer<String, String> producer = null;  
+	private static HashMap<String,String> mapTmp=new HashMap<String,String>();
+	private static Connection conn;  
+	private static PreparedStatement pst;  
 
 	static {
 		topic = PropertiesUtils.getValue("reportdata.topic");
-		PrintUtils.print("topic:"+topic);
 		groupId = topic + groupIdSuffix;
+		brokerList = PropertiesUtils.getValue("brokerList");
+		
+		Properties props = new Properties();
+        //props.put("zk.connect", "10.91.228.28:2181,10.91.228.29:2181,10.91.228.30:2181");  
+        props.put("serializer.class", "kafka.serializer.StringEncoder");  
+        //props.put("metadata.broker.list", "210.51.31.68:9092,210.51.31.67:9092");
+        props.put("metadata.broker.list", brokerList);
+        props.put("request.required.acks", "1");
+        config = new ProducerConfig(props);  
+        producer = new Producer<String, String>(config);  
 	}
+	
+	public static void main(String[] args) throws Exception {
+		String topic="aichuche-topic";
+		
+		 for(int i=0;i<=100;i=i+1){
+			String deviceId  ="test8618616969935";
+	    	//String deviceId  ="test8618616969935"+rand.nextInt(99);
+	    	String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromCurrentDate());//yyyyMMddHHmmss
+	    	String currentDate=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getLocalTimeDateFromUnixTimestamp(currentDateUnixTimestamp));
+	        //String currentDate="2015-08-03 15:47:35";
+	    	String mesg    =deviceId+";1185;2;101,"+currentDateUnixTimestamp+","+9+",-0.6512,9.3278,-0.0097,-0.0024,-0.0061,-17.1875,-1.8750,30.5625,31.253138,121.354008,2;"+currentDate;
+	    	String partitionKey=deviceId;
+			
+	    	long x3 = System.currentTimeMillis();
+	    	
+			KeyedMessage<String, String> data2 = new KeyedMessage<String, String>(topic,partitionKey,mesg);  
+        	producer.send(data2);
+			
+			long x4= System.currentTimeMillis();
+			
+			log.debug("==sendToKafka cost(ms)："+(x4-x3));
+		 }
+	} 
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response) {
+		long t1=System.currentTimeMillis();
+		
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		String deviceId = request.getParameter("deviceId");
@@ -94,10 +155,8 @@ public class ReportDataServlet extends HttpServlet {
 		String RAWDATA = null;
 		String createTime = request.getParameter("createTime");
 		
-		
 		int DataTypeID; // 根据这个DataTypeID判断消息的类型，发送到指定的kafka的topic
 		
-
 		try {
 			if ("1".equals(dataType)) {
 				data = request.getParameter("data");
@@ -115,7 +174,7 @@ public class ReportDataServlet extends HttpServlet {
 		         keyValues.put("data", RAWDATA);
 		         keyValues.put("createTime", createTime);
 				if(DataTypeID==101){
-					//log.debug("get 101 message  deviceId:"+deviceId );
+//					log.debug("get 101 message  deviceId:"+deviceId );
 //					log.debug("messageId:"+messageId );
 //					log.debug("dataType:"+dataType );
 //					log.debug("RAWDATA:"+RAWDATA );
@@ -123,12 +182,15 @@ public class ReportDataServlet extends HttpServlet {
 //					log.debug("101 message OVER:" );
 					synchronized (obj) {
 						//printRAWDATA101(result1);
+						long a1=System.currentTimeMillis(); 
 						sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
+						long a2=System.currentTimeMillis(); 
+						log.debug("==sendRAWDATA101 cost(ms)："+(a2-a1));
 					}
 				}else if(DataTypeID==102){
 					
 				}else if(DataTypeID==103){
-					
+					long a3=System.currentTimeMillis(); 
 					log.debug(" \n get 103 message  deviceId:"+deviceId );
 					log.debug("messageId:"+messageId );
 					log.debug("dataType:"+dataType );
@@ -138,6 +200,8 @@ public class ReportDataServlet extends HttpServlet {
 			         try{
 			        	 String url="";//暂时写死了
 			        	 revokeReturnMesg=revokeWebService103(url,keyValues);
+			        	 long a4=System.currentTimeMillis(); 
+						 log.debug("==revokeWebService103 cost(ms)："+(a4-a3));
 			         }catch(Exception e){
 			        	 e.printStackTrace();
 			         }
@@ -178,7 +242,10 @@ public class ReportDataServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		PrintUtils.print("====ReportDataServlet OVER=======");
+		
+		
+		long t2=System.currentTimeMillis(); 
+		log.debug("==total service  cost(ms)："+(t2-t1));
 
 	}
 
@@ -206,7 +273,7 @@ public class ReportDataServlet extends HttpServlet {
 		String createTime=keyValues.get("createTime");
 		
 		URIBuilder builder = new URIBuilder();
-		String host="210.51.31.67";//203.84.197.25 http://210.51.31.67/youyun/simplepush
+		String host=PropertiesUtils.getValue("webServiceData103Host");//203.84.197.25 http://210.51.31.67/youyun/simplepush
 		//String host="table.finance.yahoo.com";
 		builder.setScheme("http").setHost(host).setPort(9088)
 		.setPath("/RESTful_Web_Services/reportdata103")
@@ -233,6 +300,8 @@ public class ReportDataServlet extends HttpServlet {
 	}
 	
 	private void sendRAWDATA101(String deviceId,String messageId,String dataType,String createTime,byte[] result1) throws Exception {
+		long x1 = System.currentTimeMillis();
+		
 		// 定义data101
 		int DataTypeID;
 		int Date;
@@ -263,6 +332,9 @@ public class ReportDataServlet extends HttpServlet {
 		GPSX = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4)));
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
+		
+		long x2 = System.currentTimeMillis();
+		log.debug("==bytesToInt cost(ms)："+(x2-x1));
 
 		StringBuilder sb2 = new StringBuilder();
 		sb2.append(DataTypeID + ",");
@@ -282,27 +354,80 @@ public class ReportDataServlet extends HttpServlet {
 
 		String data = sb2.toString();
 
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < result1.length && i < 53; i++) {
-			sb.append("[" + i + "]:" + EncodeUtils.byteToInt(result1[i]));
-			sb.append("\n");
-		}
-		// log.debug("每个byte打印后的值：\n"+sb.toString());
-		long time = System.currentTimeMillis();
-		LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
-		String mesg = deviceId + ";" + messageId + ";" + dataType + ";" + data + ";" + createTime;
-		log.debug("reportData101 mesg:" + mesg);
-		dataMap.put("partitionKey", deviceId);
-		dataMap.put("mesg", mesg);
+//		StringBuilder sb = new StringBuilder();
+//		for (int i = 0; i < result1.length && i < 53; i++) {
+//			sb.append("[" + i + "]:" + EncodeUtils.byteToInt(result1[i]));
+//			sb.append("\n");
+//		}
+//		log.debug("每个byte打印后的值：\n"+sb.toString());
 		
-		LogStoreServiceImpl logStoreService = new LogStoreServiceImpl();
-		logStoreService.sendToKafka(dataMap, topic, groupId);
+		String mesg = deviceId + ";" + messageId + ";" + dataType + ";" + data + ";" + createTime;
+		String partitionKey=deviceId;
+		log.debug("reportData101 mesg:" + mesg); 
+		
+//		LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
+//		dataMap.put("partitionKey", deviceId);
+//		dataMap.put("mesg", mesg);
+//		LogStoreServiceImpl logStoreService = new LogStoreServiceImpl();
+//		logStoreService.sendToKafka(dataMap, topic, groupId);
+		
+		long x3 = System.currentTimeMillis();
+		
+		KeyedMessage<String, String> data2 = new KeyedMessage<String, String>(topic,partitionKey,mesg);  
+    	producer.send(data2);
+		
+		long x4= System.currentTimeMillis();
+		
+		log.debug("==sendToKafka cost(ms)："+(x4-x3));
 		
 		//测试消息是否有序
 		Map<String, Object> rtnMap =RedisClient.testOrder(deviceId, "ReportDataServlet",String.valueOf(Date));
-		log.debug("ReportDataServlet_deviceId:"+deviceId+"最新倒序的20个unixtimestamp:"+rtnMap.get(deviceId));
+		//log.debug("ReportDataServlet_deviceId:"+deviceId+"最新倒序的20个unixtimestamp:"+rtnMap.get(deviceId));
+		long x5= System.currentTimeMillis();
+		log.debug("==RedisClient.testOrder  cost(ms)："+(x5-x4));
 		
+		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
+		if(deviceId.equals("chhTestData101")){
+			long x6= System.currentTimeMillis();
+			mapTmp.put("mesg_date", createTime);
+			mapTmp.put("message", mesg);
+			putTestData101ToMysql(mapTmp);
+			long x7= System.currentTimeMillis();
+			log.debug("==insert tm_testdata101  cost(ms)："+(x7-x6));
+		}
 		
+	}
+	
+	public void putTestData101ToMysql(HashMap<String,String> mapTmp ){
+         conn =C3P0Utils.getConnection(); 
+         pst = null;
+        try {
+        	 if(conn != null){
+        	 String sql="insert into tm_testdata101(mesg_date,webService_insert_date,message)  values(?,?,?)";
+        	 String mesg_date=mapTmp.get("mesg_date");
+        	 String message=mapTmp.get("message");
+        	 
+         	pst = (PreparedStatement) conn.prepareStatement(sql);  
+         	pst.setTimestamp(1,new Timestamp(DateUtils.getMillisecondsFromLocalTimeDate(mesg_date)));
+         	pst.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+         	pst.setString(3, message);
+         	pst.execute();
+         	
+         	log.debug("  insert  tm_testdata101 ,OK");
+            }else{
+            	log.debug("   conn is null");
+            }
+        } catch (Exception e) { 
+        	log.debug(e.getMessage());
+            e.printStackTrace();
+        }finally{
+        	try {
+        		if(pst!=null)pst.close();
+        		if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+        }
 	}
 
 

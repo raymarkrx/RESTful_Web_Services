@@ -37,25 +37,29 @@ public class PropertiesUtils
 			        }
 				 
 			      properties.load(in);
-			      String brokerZkStr = properties.getProperty("brokerZkStr");
+			      String brokerList = properties.getProperty("metadata.broker.list");
 			      String  topic = properties.getProperty("reportdata.topic");
-			      String  stormZkPath = properties.getProperty("stormZkPath");
+			      String  stormZkPath = properties.getProperty("brokerStr");
 			      String  id = properties.getProperty("id");
 			      String kafkaBrokerZkPath = properties.getProperty("kafkaBrokerZkPath");
 			      String FsUrl = properties.getProperty("hdfs.fsUrl");
-			      String  reportData101Path = properties.getProperty("hdfs.reportData101Path");
+			      String  webServiceData103Host = properties.getProperty("webServiceData103Host");
 			      String urlSimplepush=properties.getProperty("url.simplepush");
+			      String  redisHost = properties.getProperty("redis.host");
+			      String redisPort=properties.getProperty("redis.port");
 			      
 			      keyValues.put("isProduction", isProduction);
 			      keyValues.put("isDebug", isDebug);
-			      keyValues.put("brokerZkStr", brokerZkStr);
+			      keyValues.put("brokerList", brokerList);
 			      keyValues.put("reportdata.topic", topic);
 			      keyValues.put("stormZkPath", stormZkPath);
 			      keyValues.put("id", id);
 			      keyValues.put("kafkaBrokerZkPath", kafkaBrokerZkPath);
 			      keyValues.put("FsUrl", FsUrl);
-			      keyValues.put("reportData101Path", reportData101Path);
+			      keyValues.put("webServiceData103Host", webServiceData103Host);
 			      keyValues.put("urlSimplepush", urlSimplepush);
+			      keyValues.put("redisHost", redisHost);
+			      keyValues.put("redisPort", redisPort);
 			      
 			      
 			      

@@ -38,7 +38,7 @@ import com.aichuche.util.UtilData;
 import com.chh.utils.DbUtils;
 import com.chh.utils.JSONUtils;
 
-public class TestServlet extends HttpServlet {
+public class TestServlet_old extends HttpServlet {
 	final Log log = LogFactory.getLog(getClass());
 
 	private static final long serialVersionUID = 3624858948204016394L;

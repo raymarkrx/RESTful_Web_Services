@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+
+import com.chh.utils.PropertiesUtils;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -21,8 +24,12 @@ public class RedisClient {
 	private static Logger log= LoggerFactory.getLogger("Data101ToMysql");  
 	private static JedisPool jedisPool;// 非切片连接池
 	private static ShardedJedisPool shardedJedisPool;// 切片连接池
+	private static String host;
+	private static int port;
 
 	static {
+		host=PropertiesUtils.getValue("redisHost");
+		port=Integer.parseInt(PropertiesUtils.getValue("redisPort"));
 		initialPool();
 		initialShardedPool();
 	}
@@ -42,7 +49,7 @@ public class RedisClient {
 		config.setMaxWaitMillis(1000l);
 		config.setTestOnBorrow(true);
 
-		jedisPool = new JedisPool(config, "210.51.31.67", 6379);
+		jedisPool = new JedisPool(config, host, port);
 	}
 
 	/**
@@ -62,7 +69,7 @@ public class RedisClient {
 		//shards.add(new JedisShardInfo("210.51.31.67", 6379, "master"));
 		
 		//new--chh
-        JedisShardInfo jedisShardInfo = new JedisShardInfo("210.51.31.67", 6379, "master");
+        JedisShardInfo jedisShardInfo = new JedisShardInfo(host, port, "master");
         jedisShardInfo.setSoTimeout(1000000);  
         
         shards.add(jedisShardInfo); 

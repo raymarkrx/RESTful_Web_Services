@@ -14,6 +14,7 @@ import java.util.*;
 import org.codehaus.jackson.JsonParser.Feature;
 
 import com.aichuche.servlet.chh.ReportDataServlet;
+import com.chh.utils.PropertiesUtils;
 
 import kafka.consumer.*;
 import kafka.javaapi.consumer.ConsumerConnector;
@@ -30,7 +31,7 @@ public class KafkaMessageQueue
     private Class messageClass;
     private boolean enableProducer;
     private boolean enableConsumer;
-    private static String brokerStr;
+    private static String brokerList;
     private static String brokerZkStr;
     private String groupId;
     private static String DEFAULT_GROUP_ID = "bfrd";
@@ -38,30 +39,11 @@ public class KafkaMessageQueue
 
 	
 	static{
-          
 		  		try{
-		  			InputStream in = null;
-		  		 //判断是否是生产环境的开关,1:加载生产环境的配置，0：加在测试环境的配置
-		  		 in=KafkaMessageQueue.class.getResourceAsStream("/config/switch.properties");
-		  		 properties.load(in);
-		  		 String isProduction = properties.getProperty("isProduction");
-		  		 properties.clear();
-		  		
-		  		 if("1".equals(isProduction)){
-		  			 System.out.println("!!!this is PRODUCTION ENVIRONMENT  !!!");
-		  			 in=ReportDataServlet.class.getResourceAsStream("/config/hadoop/server_prod.properties");
-		          }else{
-		          	System.out.println("!!!this is test environment!!!");
-		          	in=ReportDataServlet.class.getResourceAsStream("/config/hadoop/server_test.properties");
-		          }
-		  		 
-		  		   properties.load(in);
-		  		 brokerStr = properties.getProperty("brokerStr");
-		  		brokerZkStr = properties.getProperty("brokerZkStr");
-			      properties.clear();
-			      
+		  			brokerList = PropertiesUtils.getValue("brokerList");
+		  		brokerZkStr =brokerList;
 			}
-			 catch (IOException e)
+			 catch (Exception e)
 		    {
 		      e.printStackTrace();
 		 }
@@ -138,7 +120,12 @@ public class KafkaMessageQueue
         {
         	  //创建KeyedMessage发送消息，参数1为topic名，参数2为分区名（若为null则随机发到一个分区），参数3为消息
             //getProducer().send(new KeyedMessage(topic, entity));
+            long x1= System.currentTimeMillis();
+            //eyedMessage<String, String> data2 = new KeyedMessage<String, String>(topic,partitionKey,mesg);  
            getProducer().send(new KeyedMessage(topic, key, entity));
+           long x2= System.currentTimeMillis();
+			
+			System.out.println("==getProducer().send cost(ms)："+(x2-x1));
             return;
         }
     }
@@ -161,7 +148,7 @@ public class KafkaMessageQueue
     public Producer getProducer()
     {
         if(producer == null){
-        	producer = new Producer<Object, String>(createProducerConfig(brokerStr));
+        	producer = new Producer<Object, String>(createProducerConfig(brokerList));
         }
         	
         return producer;

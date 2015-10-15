@@ -1,10 +1,13 @@
 package com.chh.utils;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.aichuche.servlet.chh.testServlet_data101;
 
 
 public class DateUtils {
@@ -12,8 +15,10 @@ public class DateUtils {
      "七月", "八月", "九月", "十月", "十一月", "十二月", };
 
     public static final String[] quarters = { "一季度", "二季度", "三季度", "四季度" };
-
+	private static DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss") ;  
+    
     public DateUtils() {
+    	
     }
 
     /**
@@ -225,28 +230,7 @@ public class DateUtils {
     	  return new java.util.Date(timestamp);
     } 
     
-    /** 
-     * 将本地时间转为UNIX时间戳
-     * @param UTCTime 
-     * @return 
-     * @throws ParseException 
-     */  
-    public static long  getUnixTimestampFromLocalTimeDate(String dateStr) throws ParseException{  
-    	long epoch = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr).getTime();
-    	return epoch/1000;
-    } 
-    
-    public static long  getUnixTimestampFromLocalTimeDate2(String dateStr) {  
-    	long epoch=1L;
-		try {
-			epoch = new java.text.SimpleDateFormat("yyyyMMddHHmmss").parse(dateStr).getTime();
-			epoch=epoch/1000;
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return epoch;
-    } 
+
     
 
     /**
@@ -282,6 +266,61 @@ public class DateUtils {
     public static Timestamp getTimestamp() {
  return new Timestamp(new Date().getTime());
     }
+    
+    /** 
+     * 将本地时间转为Milliseconds
+     * @param UTCTime 
+     * @return 
+     * @throws ParseException 
+     */  
+    public static long  getMillisecondsFromLocalTimeDate(String dateStr) throws ParseException{  
+    	long epoch = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr).getTime();
+    	return epoch;
+    }
+    
+    /** 
+     * 将本地时间转为UNIX时间戳
+     * @param UTCTime 
+     * @return 
+     * @throws ParseException 
+     */  
+    public static long  getUnixTimestampFromLocalTimeDate(String dateStr) throws ParseException{  
+    	long epoch = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr).getTime();
+    	return epoch/1000;
+    } 
+    
+	public static Date fromDateStr(String dateStr) throws ParseException {
+		return DEFAULT_DATE_FORMAT.parse(dateStr);
+	}
+    
+    /** 
+     * 将本地时间转为UNIX时间戳2
+     * @param UTCTime 
+     * @return 
+     * @throws ParseException 
+     */  
+    public static long  getUnixTimestampFromLocalTimeDate2(String dateStr) {  
+    	long epoch=1L;
+		try {
+			epoch = new java.text.SimpleDateFormat("yyyyMMddHHmmss").parse(dateStr).getTime();
+			epoch=epoch/1000;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return epoch;
+    } 
+    
+    /** 
+     * 将当前时间转为UNIX时间戳
+     * @param UTCTime 
+     * @return 
+     * @throws ParseException 
+     */  
+    public static long  getUnixTimestampFromCurrentDate() throws ParseException{  
+    	long epoch = new Date().getTime();
+    	return epoch/1000;
+    } 
 
     /**
      * 将“yyyyMMdd”格式的日期字符串转换为Timestamp类型的对象。
@@ -354,6 +393,10 @@ public class DateUtils {
  SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
  return df.format(c.getTime());
     }
+    
+	public static void main(String[] args) throws Exception {
+		
+	}
 
     /**
      * 返回毫秒

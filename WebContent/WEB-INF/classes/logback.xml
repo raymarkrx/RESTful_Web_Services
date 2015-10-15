@@ -1,9 +1,9 @@
 <configuration>
 
   <appender name="Data101ToMysqlDailyRoll" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>E:/chh/Data101ToMysql.log</file>
+    <file>/home/chh/stormLog/Data101ToMysql.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>/home/chh/stormLog/Data101ToMysql.%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
     </rollingPolicy>
     <encoder>
@@ -16,9 +16,9 @@
   </logger>
 
   <appender name="Data101ToHiveDailyRoll" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>E:/chh/Data101ToHive.log</file>
+    <file>/home/chh/stormLog/Data101ToHive.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>E:/chh/Data101ToHive.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>/home/chh/stormLog/Data101ToHive.%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
     </rollingPolicy>
     <encoder>
@@ -32,9 +32,9 @@
 
 
   <appender name="Data101ToHbaseDailyRoll" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>E:/chh/Data101ToHbase.log</file>
+    <file>/home/chh/stormLog//Data101ToHbase.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>/home/chh/stormLog/Data101ToHbase.%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
     </rollingPolicy>
     <encoder>
