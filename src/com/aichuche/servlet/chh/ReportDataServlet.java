@@ -393,7 +393,7 @@ public class ReportDataServlet extends HttpServlet {
 			mapTmp.put("message", mesg);
 			putTestData101ToMysql(mapTmp);
 			long x7= System.currentTimeMillis();
-			log.debug("==insert tm_testdata101  cost(ms)："+(x7-x6));
+			log.debug("==insert tm_monitor_data101  cost(ms)："+(x7-x6));
 		}
 		
 	}
@@ -403,7 +403,7 @@ public class ReportDataServlet extends HttpServlet {
          pst = null;
         try {
         	 if(conn != null){
-        	 String sql="insert into tm_testdata101(mesg_date,webService_insert_date,message)  values(?,?,?)";
+        	 String sql="insert into tm_monitor_data101(mesg_date,webService_insert_date,message)  values(?,?,?)";
         	 String mesg_date=mapTmp.get("mesg_date");
         	 String message=mapTmp.get("message");
         	 
@@ -413,7 +413,7 @@ public class ReportDataServlet extends HttpServlet {
          	pst.setString(3, message);
          	pst.execute();
          	
-         	log.debug("  insert  tm_testdata101 ,OK");
+         	log.debug("  insert  tm_monitor_data101 ,OK");
             }else{
             	log.debug("   conn is null");
             }
