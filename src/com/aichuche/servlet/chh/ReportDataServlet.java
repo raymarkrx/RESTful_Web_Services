@@ -198,7 +198,7 @@ public class ReportDataServlet extends HttpServlet {
 					log.debug("==RAWDATA byte.length:"+result1.length );
 			         String revokeReturnMesg="";
 			         try{
-			        	 String url="";//暂时写死了
+			        	 String url="";
 			        	 revokeReturnMesg=revokeWebService103(url,keyValues);
 			        	 long a4=System.currentTimeMillis(); 
 						 log.debug("==revokeWebService103 cost(ms)："+(a4-a3));
