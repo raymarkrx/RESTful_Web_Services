@@ -334,7 +334,7 @@ public class ReportDataServlet extends HttpServlet {
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
 		
 		long x2 = System.currentTimeMillis();
-		log.debug("==bytesToInt cost(ms)："+(x2-x1));
+		log.debug("==sendRAWDATA101_bytesToInt cost(ms)："+(x2-x1));
 
 		StringBuilder sb2 = new StringBuilder();
 		sb2.append(DataTypeID + ",");
@@ -363,7 +363,7 @@ public class ReportDataServlet extends HttpServlet {
 		
 		String mesg = deviceId + ";" + messageId + ";" + dataType + ";" + data + ";" + createTime;
 		String partitionKey=deviceId;
-		log.debug("reportData101 mesg:" + mesg); 
+		log.debug("sendRAWDATA101_reportData101 mesg:" + mesg); 
 		
 //		LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
 //		dataMap.put("partitionKey", deviceId);
@@ -378,13 +378,13 @@ public class ReportDataServlet extends HttpServlet {
 		
 		long x4= System.currentTimeMillis();
 		
-		log.debug("==sendToKafka cost(ms)："+(x4-x3));
+		log.debug("==sendRAWDATA101_sendToKafka cost(ms)："+(x4-x3));
 		
 		//测试消息是否有序
-		Map<String, Object> rtnMap =RedisClient.testOrder(deviceId, "ReportDataServlet",String.valueOf(Date));
+		//Map<String, Object> rtnMap =RedisClient.testOrder(deviceId, "ReportDataServlet",String.valueOf(Date));
 		//log.debug("ReportDataServlet_deviceId:"+deviceId+"最新倒序的20个unixtimestamp:"+rtnMap.get(deviceId));
-		long x5= System.currentTimeMillis();
-		log.debug("==RedisClient.testOrder  cost(ms)："+(x5-x4));
+		//long x5= System.currentTimeMillis();
+		//log.debug("==RedisClient.testOrder  cost(ms)："+(x5-x4));
 		
 		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
 		if(deviceId.equals("chhTestData101")){
@@ -413,7 +413,7 @@ public class ReportDataServlet extends HttpServlet {
          	pst.setString(3, message);
          	pst.execute();
          	
-         	log.debug("  insert  tm_monitor_data101 ,OK");
+         	//log.debug("  insert  tm_monitor_data101 ,OK");
             }else{
             	log.debug("   conn is null");
             }
