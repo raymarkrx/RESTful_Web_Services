@@ -455,7 +455,7 @@ public class ReportDataServlet extends HttpServlet {
         	pst.setTimestamp(2,new Timestamp(DateUtils.getMillisecondsFromLocalTimeDate(mesg_date)));
         	pst.execute();
         	
-        	log.debug("  update  tm_monitor_data101  ,OK");
+        	//log.debug("  update  tm_monitor_data101  ,OK");
            }else{
            	log.debug("   conn is null");
            }
