@@ -70,7 +70,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 
 import com.aichuche.servlet.LogStoreServiceImpl;
-import com.aichuche.storm.reportData.bean.ReportDataBean;
 import com.aichuche.util.UtilData;
 import com.chh.utils.C3P0Utils;
 import com.chh.utils.DateUtils;
