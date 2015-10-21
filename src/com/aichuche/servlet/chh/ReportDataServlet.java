@@ -68,7 +68,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 
 
+
 import com.aichuche.servlet.LogStoreServiceImpl;
+import com.aichuche.storm.reportData.bean.ReportDataBean;
 import com.aichuche.util.UtilData;
 import com.chh.utils.C3P0Utils;
 import com.chh.utils.DateUtils;
@@ -335,6 +337,8 @@ public class ReportDataServlet extends HttpServlet {
 		
 		long x2 = System.currentTimeMillis();
 		log.debug("==sendRAWDATA101_bytesToInt cost(ms)："+(x2-x1));
+		
+
 
 		StringBuilder sb2 = new StringBuilder();
 		sb2.append(DataTypeID + ",");
@@ -365,6 +369,16 @@ public class ReportDataServlet extends HttpServlet {
 		String partitionKey=deviceId;
 		log.debug("sendRAWDATA101_reportData101 mesg:" + mesg); 
 		
+		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
+		if(deviceId.equals("chhTestData101")){
+			long x6= System.currentTimeMillis();
+			mapTmp.put("mesg_date", createTime);
+			mapTmp.put("message", mesg);
+			putTestData101ToMysql(mapTmp);
+			long x7= System.currentTimeMillis();
+			log.debug("==insert tm_monitor_data101  cost(ms)："+(x7-x6));
+		}
+		
 //		LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
 //		dataMap.put("partitionKey", deviceId);
 //		dataMap.put("mesg", mesg);
@@ -390,10 +404,9 @@ public class ReportDataServlet extends HttpServlet {
 		if(deviceId.equals("chhTestData101")){
 			long x6= System.currentTimeMillis();
 			mapTmp.put("mesg_date", createTime);
-			mapTmp.put("message", mesg);
-			putTestData101ToMysql(mapTmp);
+			updateTestData101ToMysql(mapTmp);
 			long x7= System.currentTimeMillis();
-			log.debug("==insert tm_monitor_data101  cost(ms)："+(x7-x6));
+			log.debug("==update  tm_monitor_data101`s webService_leave_date  cost(ms)："+(x7-x6));
 		}
 		
 	}
@@ -403,7 +416,7 @@ public class ReportDataServlet extends HttpServlet {
          pst = null;
         try {
         	 if(conn != null){
-        	 String sql="insert into tm_monitor_data101(mesg_date,webService_insert_date,message)  values(?,?,?)";
+        	 String sql="insert into tm_monitor_data101(mesg_date,webService_receive_date,message)  values(?,?,?)";
         	 String mesg_date=mapTmp.get("mesg_date");
         	 String message=mapTmp.get("message");
         	 
@@ -428,6 +441,36 @@ public class ReportDataServlet extends HttpServlet {
 				e.printStackTrace();
 			}
         }
+	}
+	
+	public void updateTestData101ToMysql(HashMap<String,String> mapTmp ){
+        conn =C3P0Utils.getConnection(); 
+        pst = null;
+       try {
+       	 if(conn != null){
+       	 String sql="update  tm_monitor_data101 set webService_leave_date=? where mesg_date=?";
+    	 String mesg_date=mapTmp.get("mesg_date");
+       	 
+        	pst = (PreparedStatement) conn.prepareStatement(sql);  
+        	pst.setTimestamp(1, new java.sql.Timestamp(System.currentTimeMillis()));
+        	pst.setTimestamp(2,new Timestamp(DateUtils.getMillisecondsFromLocalTimeDate(mesg_date)));
+        	pst.execute();
+        	
+        	log.debug("  update  tm_monitor_data101  ,OK");
+           }else{
+           	log.debug("   conn is null");
+           }
+       } catch (Exception e) { 
+       	log.debug(e.getMessage());
+           e.printStackTrace();
+       }finally{
+       	try {
+       		if(pst!=null)pst.close();
+       		if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+       }
 	}
 
 
