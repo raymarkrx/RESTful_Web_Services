@@ -123,7 +123,7 @@ public class testServlet_data101 {
 	         //调用webService
 	         revokeServletData101(keyValues);
         	
-        	Thread.sleep(1000*1);
+        	Thread.sleep(100*1);
         } 
         
         //System.out.println("=====================OVER================");
