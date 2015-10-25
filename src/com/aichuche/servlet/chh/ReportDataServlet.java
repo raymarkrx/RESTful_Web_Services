@@ -99,7 +99,7 @@ public class ReportDataServlet extends HttpServlet {
 	private static ProducerConfig config = null;  
 	private static Producer<String, String> producer = null;  
 	private static HashMap<String,String> mapTmp=new HashMap<String,String>();
-	private static Connection conn;  
+	private static Connection conn;   
 	private static PreparedStatement pst;  
 
 	static {
