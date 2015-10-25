@@ -112,7 +112,7 @@ public class ReportDataServlet extends HttpServlet {
         props.put("serializer.class", "kafka.serializer.StringEncoder");  
         //props.put("metadata.broker.list", "210.51.31.68:9092,210.51.31.67:9092");
         props.put("metadata.broker.list", brokerList);//使用这个参数传入boker和分区的静态信息，如host1:port1,host2:port2, 这个可以是全部boker的一部分
-        props.put("request.required.acks", "1");//0表示producer毋须等待leader的确认，1代表需要leader确认写入它的本地log并立即确认，-1代表所有的备份都完成后确认。 仅仅for sync
+        props.put("request.required.acks", "0");//0表示producer毋须等待leader的确认，1代表需要leader确认写入它的本地log并立即确认，-1代表所有的备份都完成后确认。 仅仅for sync
         config = new ProducerConfig(props); 
         producer = new Producer<String, String>(config);  
 	}
