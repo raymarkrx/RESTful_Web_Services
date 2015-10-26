@@ -241,7 +241,7 @@ public class ReportDataServlet extends HttpServlet {
 		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
 		if(deviceId.equals("chhTestData101")){
 			String nowTime=DateUtils.getCurrentDateStr2();
-			mapTmp.put("webService_leave_date", nowTime);
+			mapTmp.put("createTime", createTime);
 			updateTestData101ToMysql(mapTmp);
 		}
 		
@@ -401,7 +401,7 @@ public class ReportDataServlet extends HttpServlet {
 		log.debug("==sendRAWDATA101_sendToKafka cost(ms)："+(x4-x3));
 		
 		//测试消息是否有序
-		Map<String, Object> rtnMap =RedisClient.testOrder(deviceId, "ReportDataServlet",String.valueOf(Date));
+		//Map<String, Object> rtnMap =RedisClient.testOrder(deviceId, "ReportDataServlet",String.valueOf(Date));
 		//log.debug("ReportDataServlet_deviceId:"+deviceId+"最新倒序的20个unixtimestamp:"+rtnMap.get(deviceId));
 		//long x5= System.currentTimeMillis();
 		//log.debug("==RedisClient.testOrder  cost(ms)："+(x5-x4));
@@ -448,7 +448,7 @@ public class ReportDataServlet extends HttpServlet {
        try {
        	 if(conn != null){
        	 String sql="update  tm_monitor_data101 set webService_leave_date=? where mesg_date=?";
-    	 String mesg_date=mapTmp.get("webService_leave_date");
+    	 String mesg_date=mapTmp.get("createTime");
        	 
         	pst = (PreparedStatement) conn.prepareStatement(sql);  
         	pst.setTimestamp(1, new java.sql.Timestamp(System.currentTimeMillis()));
