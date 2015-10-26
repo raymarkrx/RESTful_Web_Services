@@ -246,12 +246,9 @@ public class ReportDataServlet extends HttpServlet {
 		
 		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
 		if(deviceId.equals("chhTestData101")){
-			long x6= System.currentTimeMillis();
 			String nowTime=DateUtils.getCurrentDateStr2();
 			mapTmp.put("webService_leave_date", nowTime);
 			updateTestData101ToMysql(mapTmp);
-			long x7= System.currentTimeMillis();
-			log.debug("==update  tm_monitor_data101`s webService_leave_date  cost(ms)："+(x7-x6));
 		}
 		
 		long t2=System.currentTimeMillis(); 
@@ -443,6 +440,8 @@ public class ReportDataServlet extends HttpServlet {
 	}
 	
 	public void updateTestData101ToMysql(HashMap<String,String> mapTmp ){
+		long x6= System.currentTimeMillis();
+		
         conn =C3P0Utils.getConnection(); 
         pst = null;
        try {
@@ -455,7 +454,8 @@ public class ReportDataServlet extends HttpServlet {
         	pst.setTimestamp(2,new Timestamp(DateUtils.getMillisecondsFromLocalTimeDate(mesg_date)));
         	pst.execute();
         	
-        	//log.debug("  update  tm_monitor_data101  ,OK");
+        	long x7= System.currentTimeMillis();
+        	log.debug("==update  tm_monitor_data101`s webService_leave_date  cost(ms)："+(x7-x6));
            }else{
            	log.debug("   conn is null");
            }
