@@ -143,7 +143,7 @@ public class ReportDataServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response) {
-		long t1=System.currentTimeMillis();
+		long beginTime=System.currentTimeMillis();
 		
 		
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -238,12 +238,6 @@ public class ReportDataServlet extends HttpServlet {
 		}
 		String temp = JSONUtils.MapToJSONString(result);
 
-		try {
-			response.getOutputStream().write(temp.getBytes(CHARSET_UTF8));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
 		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
 		if(deviceId.equals("chhTestData101")){
 			String nowTime=DateUtils.getCurrentDateStr2();
@@ -251,8 +245,15 @@ public class ReportDataServlet extends HttpServlet {
 			updateTestData101ToMysql(mapTmp);
 		}
 		
-		long t2=System.currentTimeMillis(); 
-		log.debug("==total service  cost(ms)："+(t2-t1));
+		long endTime=System.currentTimeMillis(); 
+		log.debug("==total service  cost(ms)："+(endTime-beginTime));
+		
+		try {
+			response.getOutputStream().write(temp.getBytes(CHARSET_UTF8));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 
 	}
 
