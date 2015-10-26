@@ -22,9 +22,9 @@ import com.chh.utils.PrintUtils;
 import com.chh.utils.encoding.EncodeUtils;
 
  
-public class testServlet_data101 {
+public class testServlet_data101_batch {
 	public static void main(String[] args) throws Exception {
-		testServlet_data101 testIt=new testServlet_data101();
+		testServlet_data101_batch testIt=new testServlet_data101_batch();
 		testIt.testWebService();
 	}
 	
