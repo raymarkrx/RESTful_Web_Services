@@ -301,7 +301,6 @@ public class RedisUtil {
 	 */
 	public List<String> batchGetString(final String[] keys) {
 		return new Executor<List<String>>(shardedJedisPool) {
-
 			@Override
 			List<String> execute() {
 				ShardedJedisPipeline pipeline = jedis.pipelined();
