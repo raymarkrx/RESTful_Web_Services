@@ -377,6 +377,19 @@ public class DateUtils {
  str = df.format(date);
  return str;
     }
+    
+    /**
+     * 获取当前日期和时间
+     * 
+     * @return String
+     */
+    public static String getCurrentDateStr2() {
+ Date date = new Date();
+ String str = null;                                    
+ SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+ str = df.format(date);
+ return str;
+    }
 
     /**
      * 日期相加

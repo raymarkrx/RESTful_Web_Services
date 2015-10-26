@@ -244,6 +244,15 @@ public class ReportDataServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
+		if(deviceId.equals("chhTestData101")){
+			long x6= System.currentTimeMillis();
+			String nowTime=DateUtils.getCurrentDateStr2();
+			mapTmp.put("webService_leave_date", nowTime);
+			updateTestData101ToMysql(mapTmp);
+			long x7= System.currentTimeMillis();
+			log.debug("==update  tm_monitor_data101`s webService_leave_date  cost(ms)："+(x7-x6));
+		}
 		
 		long t2=System.currentTimeMillis(); 
 		log.debug("==total service  cost(ms)："+(t2-t1));
@@ -399,15 +408,6 @@ public class ReportDataServlet extends HttpServlet {
 		//long x5= System.currentTimeMillis();
 		//log.debug("==RedisClient.testOrder  cost(ms)："+(x5-x4));
 		
-		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
-		if(deviceId.equals("chhTestData101")){
-			long x6= System.currentTimeMillis();
-			mapTmp.put("mesg_date", createTime);
-			updateTestData101ToMysql(mapTmp);
-			long x7= System.currentTimeMillis();
-			log.debug("==update  tm_monitor_data101`s webService_leave_date  cost(ms)："+(x7-x6));
-		}
-		
 	}
 	
 	public void putTestData101ToMysql(HashMap<String,String> mapTmp ){
@@ -448,7 +448,7 @@ public class ReportDataServlet extends HttpServlet {
        try {
        	 if(conn != null){
        	 String sql="update  tm_monitor_data101 set webService_leave_date=? where mesg_date=?";
-    	 String mesg_date=mapTmp.get("mesg_date");
+    	 String mesg_date=mapTmp.get("webService_leave_date");
        	 
         	pst = (PreparedStatement) conn.prepareStatement(sql);  
         	pst.setTimestamp(1, new java.sql.Timestamp(System.currentTimeMillis()));
