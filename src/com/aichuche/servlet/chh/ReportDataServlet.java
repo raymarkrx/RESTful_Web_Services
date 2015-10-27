@@ -398,7 +398,7 @@ public class ReportDataServlet extends HttpServlet {
 		
 		long x4= System.currentTimeMillis();
 		
-		log.debug("==sendRAWDATA101_sendToKafka cost(ms)："+(x4-x3));
+		log.debug("==sendRAWDATA101_sendToKafka cost(ms) ："+(x4-x3));
 		
 		//测试消息是否有序
 		//Map<String, Object> rtnMap =RedisClient.testOrder(deviceId, "ReportDataServlet",String.valueOf(Date));
