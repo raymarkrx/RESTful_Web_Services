@@ -37,7 +37,7 @@ public class testServlet_data101_batch {
         a.add("3,30");//s5
         
         Random rand = new Random();
-        for(int i=0;i<1;i=i+1){
+        for(int i=0;i<99999;i=i+1){
         	int j=i%a.size();
         	String b=a.get(j);
         	String[] c=b.split(",");
@@ -123,7 +123,7 @@ public class testServlet_data101_batch {
 	         //调用webService
 	         revokeServletData101(keyValues);
         	
-        	Thread.sleep(1000*1);
+        	Thread.sleep(100*1);
         } 
         
         //System.out.println("=====================OVER================");
