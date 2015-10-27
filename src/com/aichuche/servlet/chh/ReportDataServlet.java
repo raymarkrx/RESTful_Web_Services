@@ -382,7 +382,7 @@ public class ReportDataServlet extends HttpServlet {
 			mapTmp.put("message", mesg);
 			putTestData101ToMysql(mapTmp);
 			long x7= System.currentTimeMillis();
-			log.debug("==insert tm_monitor_data101  cost(ms)："+(x7-x6));
+			log.debug("=== insert tm_monitor_data101  cost(ms)："+(x7-x6));
 		}
 		
 //		LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
