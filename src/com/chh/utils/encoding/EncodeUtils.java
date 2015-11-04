@@ -448,6 +448,22 @@ public class EncodeUtils {
 		        return number;  
 		    }
 		    
+		    /** 
+		     *将4个字节的byte数组，基于位移的 byte[]转化成int 
+		     * @param byte[] bytes 
+		     * @return int  number 
+		     */  
+//			  00000000  01001010   00000000  01001010
+//			  [3]					[2]					[1]                     [0]
+ 		    public static int bytesToInt2(byte[] bytes) {
+		        int number = bytes[0] & 0xFF;  
+		        // "|="按位或赋值。  
+		        number |= ((bytes[1] << 8) & 0xFF00);  
+		        number |= ((bytes[2] << 16) & 0xFF0000);  
+		        number |= ((bytes[3] << 24) & 0xFF000000);  
+		        return number;  
+		    }
+		    
 		    
 		    /** 
 		     *将4个字节的byte数组，基于位移的 byte[]转化成int 
