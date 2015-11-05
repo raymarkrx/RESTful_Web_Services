@@ -449,7 +449,7 @@ public class EncodeUtils {
 		    }
 		    
 		    /** 
-		     *将4个字节的byte数组，基于位移的 byte[]转化成int 
+		     *将2个字节的byte数组，基于位移的 byte[]转化成int 
 		     * @param byte[] bytes 
 		     * @return int  number 
 		     */  

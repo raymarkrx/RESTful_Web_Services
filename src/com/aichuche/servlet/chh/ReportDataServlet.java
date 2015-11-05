@@ -159,7 +159,7 @@ public class ReportDataServlet extends HttpServlet {
 		int DataTypeID; // 根据这个DataTypeID判断消息的类型，发送到指定的kafka的topic
 		
 		try {
-			if ("1".equals(dataType)) {
+			if ("1".equals(dataType)) {//没有压缩的情况
 				data = request.getParameter("data");
 			} else {
 				RAWDATA = request.getParameter("data");
@@ -182,7 +182,7 @@ public class ReportDataServlet extends HttpServlet {
 //					log.debug("==RAWDATA byte.length:"+result1.length );
 //					log.debug("101 message OVER:" );
 					synchronized (obj) {
-						//printRAWDATA101(result1);
+						printRAWDATA101(result1);
 						long a1=System.currentTimeMillis(); 
 						sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
 						long a2=System.currentTimeMillis(); 
@@ -207,6 +207,8 @@ public class ReportDataServlet extends HttpServlet {
 			        	 e.printStackTrace();
 			         }
 				}
+				
+				
 				result.put("return_code", 0);
 				result.put("return_message", "success");
 			}
@@ -486,31 +488,20 @@ public class ReportDataServlet extends HttpServlet {
 
 	private void printRAWDATA101(byte[] result1) throws IOException {
 
-		// log.debug("解码后,第0个字节："+String.valueOf(EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1,0,1))));
-		// log.debug("解码后,第1-4个字节："+String.valueOf(EncodeUtils.
-		// bytesToInt4(EncodeUtils.splitBytesArray(result1,1,4))));
-		// log.debug("解码后,第5-8个字节："+String.valueOf(
-		// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,5,4))));
-		// log.debug("解码后,第9-12个字节："+String.valueOf(
-		// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,9,4))));
-		// log.debug("解码后,第13-16个字节："+String.valueOf(
-		// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,13,4))));
-		// log.debug("解码后,第17-20个字节："+String.valueOf(
-		// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,17,4))));
-		// log.debug("解码后,第21-24个字节："+String.valueOf(
-		// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,21,4))));
-		// log.debug("解码后,第25-28个字节："+String.valueOf(
-		// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,25,4))));
-		// log.debug("解码后,第29-32个字节："+String.valueOf(
-		// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,29,4))));
-		// log.debug("解码后,第33-36个字节："+String.valueOf(
-		// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,33,4))));
-		// log.debug("解码后,第37-40个字节："+String.valueOf(
-		// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,37,4))));
-		//log.debug("解码后,第41-44个字节(GPSX)："+ String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4))));
-		//log.debug("解码后,第45-48个字节(GPSY)："+ String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4))));
-				// log.debug("解码后,第49-52个字节："+String.valueOf(
-				// EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,49,4))));
+//		log.debug("解码后,第0个字节："+String.valueOf(EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1,0,1))));
+//		log.debug("解码后,第1-4个字节："+String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,1,4))));
+//		log.debug("解码后,第5-8个字节："+String.valueOf( EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,5,4))));
+//		log.debug("解码后,第9-12个字节："+String.valueOf( EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,9,4))));
+//		log.debug("解码后,第13-16个字节："+String.valueOf( EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,13,4))));
+//		log.debug("解码后,第17-20个字节："+String.valueOf( EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,17,4))));
+//		log.debug("解码后,第21-24个字节："+String.valueOf( EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,21,4))));
+//		log.debug("解码后,第25-28个字节："+String.valueOf( EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,25,4))));
+//		log.debug("解码后,第29-32个字节："+String.valueOf( EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,29,4))));
+//		log.debug("解码后,第33-36个字节："+String.valueOf( EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,33,4))));
+//		log.debug("解码后,第37-40个字节："+String.valueOf( EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,37,4))));
+//		log.debug("解码后,第41-44个字节(GPSX)："+ String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4))));
+//		log.debug("解码后,第45-48个字节(GPSY)："+ String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4))));
+//		log.debug("解码后,第49-52个字节："+String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1,49,4))));
 
 		// 定义data的
 		int DataTypeID;
