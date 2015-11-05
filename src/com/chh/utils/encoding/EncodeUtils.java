@@ -430,7 +430,7 @@ public class EncodeUtils {
 		     *基于位移的 byte[]转化成int 
 		     * @param byte[] bytes 
 		     * @return int  number 
-		     */  
+		     */ 
 		      
 		    public static int bytesToInt1(byte[] bytes) {
 		        int number = bytes[0] & 0xFF;    

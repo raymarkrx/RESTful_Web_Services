@@ -345,11 +345,9 @@ public class ReportDataServlet extends HttpServlet {
 		GPSX = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4)));
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
-		
-		
-		hgJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 2)));
-		fyJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 55, 2)));
-		hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 2)));
+		hgJiao = String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 53, 2)));
+		fyJiao =String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 55, 2)));
+		hxJiao =String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 57, 2)));
 		
 		
 		long x2 = System.currentTimeMillis();
@@ -371,7 +369,10 @@ public class ReportDataServlet extends HttpServlet {
 		sb2.append(Tz + ",");
 		sb2.append(GPSX + ",");
 		sb2.append(GPSY + ",");
-		sb2.append(Speed); // 最后一个不要加 ;
+		sb2.append(Speed + ",");
+		sb2.append(hgJiao + ",");
+		sb2.append(fyJiao + ",");
+		sb2.append(hxJiao );// 最后一个不要加 ;
 
 		String data = sb2.toString();
 
@@ -518,6 +519,9 @@ public class ReportDataServlet extends HttpServlet {
 		String GPSX;
 		String GPSY;
 		String Speed;
+		String hgJiao;//横滚角 2个字节
+		String fyJiao;//俯仰角 2个字节
+		String hxJiao;//航向角 2个字节
 
 		DataTypeID = EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1, 0, 1));
 		Date = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 1, 4));
@@ -533,6 +537,9 @@ public class ReportDataServlet extends HttpServlet {
 		GPSX = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4)));
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
+		hgJiao = String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 53, 2)));
+		fyJiao =String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 55, 2)));
+		hxJiao =String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 57, 2)));
 
 		// log.debug("解码后,第0个字节："+ DataTypeID );
 		// log.debug("解码后,第1-4个字节："+ Date );
