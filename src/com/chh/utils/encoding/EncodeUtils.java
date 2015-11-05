@@ -315,59 +315,7 @@ public class EncodeUtils {
 	}
 	
 	public static void main(String[] args) {
-		//char s = "|";
-		//System.out.println(charEscape("\001".charAt(0)));
-		//String a="Zf3nnFUV4v//3TUAAAqLAQAa9P//3vn//+sDAABntgUAVPj+/waI/v8AAAAAAAAAAAAAAAA=";
-//		byte[] b=base64Decode(a);
-//		String re=base64Encode(b);
-//		PrintUtils.print(re);
-		
-		//String temp="test123abc";
-//		PrintUtils.print("源字符："+temp);
-//		 PrintUtils.print("编码后："+Base64.encodeBase64String(temp.getBytes()));
-//		 PrintUtils.print("解码后："+new String(Base64.decodeBase64(Base64.encodeBase64String(temp.getBytes()))));
-		
-		
-//		 PrintUtils.print("编码后："+base64Encode(temp.getBytes()));
-//		 PrintUtils.print("解码后："+new String(base64Decode(base64Encode(temp.getBytes()))));
-		 
-//		int int1=101; //1个字节
-//		int int2=102000; //4个字节
-//		int int3=103000; //4个字节
-//		
-//		 PrintUtils.print("解码前,1个字节："+String.valueOf(int1));
-//		 PrintUtils.print("解码前,4个字节："+String.valueOf(int2));
-//		 PrintUtils.print("解码前,4个字节："+String.valueOf(int3));
-//		
-//		 byte[] a1=intToByte1(int1); 
-//		 byte[] a2=intToByte4(int2); 
-//		 byte[] a3=intToByte4(int3); 
-//
-//		 byte[] temp=combineTowBytes(a1,a2);
-//		 temp=combineTowBytes(temp,a3);
-//		 PrintUtils.print("传给我的BASE64后的字符串："+base64Encode(temp));
-//		 String mesg="ZQDonFXoFwAAroMAADRDAQDPEQAAIff//0gMAACfBgUAjpv+/w7U//8AAAAAAAAAAAAAAAA=";
-//		 byte[] result=base64Decode(mesg);//我解码
-//		 PrintUtils.print("字节长度："+result.length);
-//		 PrintUtils.print("解码后,1个字节："+String.valueOf(bytesToInt1(splitBytesArray(result,0,1))));
-//		 PrintUtils.print("解码后,1-4个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,1,4))));
-//		 PrintUtils.print("解码后,5-8个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,5,4))));
-//		 PrintUtils.print("解码后,9-12个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,9,4))));
-//		 PrintUtils.print("解码后,13-16个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,13,4))));
-//		 PrintUtils.print("解码后,17-20个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,17,4))));
-//		 PrintUtils.print("解码后,21-24个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,21,4))));
-//		 PrintUtils.print("解码后,25-28个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,25,4))));
-//		 PrintUtils.print("解码后,29-32个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,29,4))));
-//		 PrintUtils.print("解码后,33-36个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,33,4))));
-//		 PrintUtils.print("解码后,37-40个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,37,4))));
-//		 PrintUtils.print("解码后,41-44个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,41,4))));
-//		 PrintUtils.print("解码后,45-48个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,45,4))));
-//		PrintUtils.print("解码后,49-52个字节："+String.valueOf( bytesToInt4(splitBytesArray(result,49,4))));   //若打开
-		
-//		int a=10;
-//		System.out.println(Integer.toBinaryString(a));
-		
-		
+	
 		String a="150721131";
 		int x=Integer.parseInt(a.substring(0, 8));
 		int y=Integer.parseInt(a.substring(8, a.length()));
