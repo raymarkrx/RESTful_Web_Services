@@ -183,7 +183,7 @@ public class ReportDataServlet extends HttpServlet {
 //					log.debug("101 message OVER:" );
 					synchronized (obj) {
 						 log.debug("字节数组长度："+result1.length);
-						printRAWDATA101(result1);
+						//printRAWDATA101(result1);
 						long a1=System.currentTimeMillis(); 
 						sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
 						long a2=System.currentTimeMillis(); 
@@ -346,9 +346,15 @@ public class ReportDataServlet extends HttpServlet {
 		GPSX = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4)));
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
-		hgJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
-		fyJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
-		hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
+		if(result1.length<=53){//老格式的数据没有后面的3个字段，是53个字节
+			hgJiao = "0";
+			fyJiao ="0";
+			hxJiao ="0";
+		}else{//新格式的数据是65个字节，加了3个字段，每个字段4个字节
+			hgJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
+			fyJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
+			hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
+		}
 		
 		
 		long x2 = System.currentTimeMillis();
@@ -538,9 +544,15 @@ public class ReportDataServlet extends HttpServlet {
 		GPSX = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4)));
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
-		hgJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
-		fyJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
-		hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
+		if(result1.length<=53){//老格式的数据没有后面的3个字段，是53个字节
+			hgJiao = "0";
+			fyJiao ="0";
+			hxJiao ="0";
+		}else{//新格式的数据是65个字节，加了3个字段，每个字段4个字节
+			hgJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
+			fyJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
+			hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
+		}
 
 		
 		 log.debug("解码后,第0个字节："+ DataTypeID );
@@ -559,7 +571,7 @@ public class ReportDataServlet extends HttpServlet {
 		 log.debug("解码后,第49-52个字节："+ Speed );
 		log.debug("解码后,第53-56个字节(hgJiao)：" + hgJiao);
 		log.debug("解码后,第57-60个字节(fyJiao)：" + fyJiao);
-		 log.debug("解码后,第61-64个字节："+ hxJiao );
+		 log.debug("解码后,第61-64个字节(hxJiao)："+ hxJiao );
 
 	}
 
