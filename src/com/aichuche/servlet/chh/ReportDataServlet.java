@@ -182,6 +182,7 @@ public class ReportDataServlet extends HttpServlet {
 //					log.debug("==RAWDATA byte.length:"+result1.length );
 //					log.debug("101 message OVER:" );
 					synchronized (obj) {
+						 log.debug("字节数组长度："+result1.length);
 						printRAWDATA101(result1);
 						long a1=System.currentTimeMillis(); 
 						sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
@@ -345,9 +346,9 @@ public class ReportDataServlet extends HttpServlet {
 		GPSX = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4)));
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
-		hgJiao = String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 53, 2)));
-		fyJiao =String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 55, 2)));
-		hxJiao =String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 57, 2)));
+		hgJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
+		fyJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
+		hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
 		
 		
 		long x2 = System.currentTimeMillis();
@@ -537,24 +538,28 @@ public class ReportDataServlet extends HttpServlet {
 		GPSX = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4)));
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
-		hgJiao = String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 53, 2)));
-		fyJiao =String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 55, 2)));
-		hxJiao =String.valueOf(EncodeUtils.bytesToInt2(EncodeUtils.splitBytesArray(result1, 57, 2)));
+		hgJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
+		fyJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
+		hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
 
-		// log.debug("解码后,第0个字节："+ DataTypeID );
-		// log.debug("解码后,第1-4个字节："+ Date );
-		// log.debug("解码后,第5-8个字节："+ Ax );
-		// log.debug("解码后,第9-12个字节："+ Ay );
-		// log.debug("解码后,第13-16个字节："+Az );
-		// log.debug("解码后,第17-20个字节："+Wx );
-		// log.debug("解码后,第21-24个字节："+Wy );
-		// log.debug("解码后,第25-28个字节："+Wz );
-		// log.debug("解码后,第29-32个字节："+Tx );
-		// log.debug("解码后,第33-36个字节："+Ty );
-		// log.debug("解码后,第37-40个字节："+Tz );
-		//log.debug("格式化后,第41-44个字节(GPSX)：" + GPSX);
-		//log.debug("格式化后,第45-48个字节(GPSY)：" + GPSY);
-		// log.debug("解码后,第49-52个字节："+ Speed );
+		
+		 log.debug("解码后,第0个字节："+ DataTypeID );
+		 log.debug("解码后,第1-4个字节："+ Date );
+		 log.debug("解码后,第5-8个字节："+ Ax );
+		 log.debug("解码后,第9-12个字节："+ Ay );
+		 log.debug("解码后,第13-16个字节："+Az );
+		 log.debug("解码后,第17-20个字节："+Wx );
+		 log.debug("解码后,第21-24个字节："+Wy );
+		 log.debug("解码后,第25-28个字节："+Wz );
+		 log.debug("解码后,第29-32个字节："+Tx );
+		 log.debug("解码后,第33-36个字节："+Ty );
+		 log.debug("解码后,第37-40个字节："+Tz );
+		log.debug("解码格式化后,第41-44个字节(GPSX)：" + GPSX);
+		log.debug("解码格式化后,第45-48个字节(GPSY)：" + GPSY);
+		 log.debug("解码后,第49-52个字节："+ Speed );
+		log.debug("解码后,第53-56个字节(hgJiao)：" + hgJiao);
+		log.debug("解码后,第57-60个字节(fyJiao)：" + fyJiao);
+		 log.debug("解码后,第61-64个字节："+ hxJiao );
 
 	}
 
