@@ -328,9 +328,9 @@ public class ReportDataServlet extends HttpServlet {
 		String GPSX;
 		String GPSY;
 		String Speed;
-		String hgJiao;//横滚角 2个字节
-		String fyJiao;//俯仰角 2个字节
-		String hxJiao;//航向角 2个字节
+		String fyJiao;//俯仰角 
+		String hxJiao;//航向角
+		String hgJiao;//横滚角 
 
 		DataTypeID = EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1, 0, 1));
 		Date = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 1, 4));
@@ -347,12 +347,12 @@ public class ReportDataServlet extends HttpServlet {
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
 		if(result1.length<=53){//老格式的数据没有后面的3个字段，是53个字节
-			hgJiao = "0";
 			fyJiao ="0";
+			hgJiao = "0";
 			hxJiao ="0";
 		}else{//新格式的数据是65个字节，加了3个字段，每个字段4个字节
-			hgJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
-			fyJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
+			fyJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
+			hgJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
 			hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
 		}
 		
@@ -377,9 +377,9 @@ public class ReportDataServlet extends HttpServlet {
 		sb2.append(GPSX + ",");
 		sb2.append(GPSY + ",");
 		sb2.append(Speed + ",");
+		sb2.append(fyJiao +",");
 		sb2.append(hgJiao + ",");
-		sb2.append(fyJiao + ",");
-		sb2.append(hxJiao );// 最后一个不要加 ;
+		sb2.append(hxJiao);// 最后一个不要加 ;
 
 		String data = sb2.toString();
 
