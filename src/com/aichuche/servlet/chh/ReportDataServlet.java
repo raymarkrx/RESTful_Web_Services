@@ -182,7 +182,7 @@ public class ReportDataServlet extends HttpServlet {
 //					log.debug("==RAWDATA byte.length:"+result1.length );
 //					log.debug("101 message OVER:" );
 					synchronized (obj) {
-						 log.debug("字节数组长度："+result1.length);
+						 //log.debug("字节数组长度："+result1.length);
 						//printRAWDATA101(result1);
 						long a1=System.currentTimeMillis(); 
 						sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
@@ -347,16 +347,14 @@ public class ReportDataServlet extends HttpServlet {
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
 		if(result1.length<=53){//老格式的数据没有后面的3个字段，是53个字节
-			fyJiao ="0";
-			hgJiao = "0";
-			hxJiao ="0";
+			fyJiao ="500";//3个角度默认值：500
+			hgJiao = "500";
+			hxJiao ="500";
 		}else{//新格式的数据是65个字节，加了3个字段，每个字段4个字节
 			fyJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
 			hgJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
 			hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
 		}
-		
-		
 		long x2 = System.currentTimeMillis();
 		log.debug("==sendRAWDATA101_bytesToInt cost(ms)："+(x2-x1));
 		
