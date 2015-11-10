@@ -53,6 +53,24 @@ id="WebApp_ID" version="2.5">
   </servlet-mapping>
   
   <servlet>
+    <servlet-name>simplePushServlet</servlet-name>
+    <servlet-class>com.aichuche.servlet.chh.SimplePushServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>simplePushServlet</servlet-name>
+    <url-pattern>/simplepush</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>simplePushRevokeServlet</servlet-name>
+    <servlet-class>com.aichuche.servlet.chh.SimplePushRevokeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>simplePushRevokeServlet</servlet-name>
+    <url-pattern>/simplepush_revoke</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
     <servlet-name>downpushServlet</servlet-name>
     <servlet-class>com.aichuche.servlet.chh.DownPushServlet</servlet-class>
   </servlet>
@@ -60,7 +78,6 @@ id="WebApp_ID" version="2.5">
     <servlet-name>downpushServlet</servlet-name>
     <url-pattern>/downpushServlet</url-pattern>
   </servlet-mapping>
-
   
   <servlet>
     <servlet-name>testServlet</servlet-name>
