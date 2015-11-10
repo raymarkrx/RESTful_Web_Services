@@ -152,11 +152,6 @@ public class DownPushServlet extends HttpServlet {
 //				-1:调用失败
 //				2:执行成功
 //				-2:执行失败
-//	         	String deviceIdEncode=URLEncoder.encode(deviceId,"utf-8");
-//	         	log.debug("deviceIdEncode:"+deviceIdEncode);
-//		         String url=PropertiesUtils.getValue("urlSimplepush")+"?"
-//		        		+ "deviceId="+deviceIdEncode+"&messageId="+messageid1+"&dataType="+DataType+"&data="+data;
-//		         log.debug(" revoke URL:"+url);
 		         
 	         	//把data转为字节流
 	         	byte[] result1=null;
@@ -287,7 +282,7 @@ public class DownPushServlet extends HttpServlet {
 		//log.debug("===deviceId:"+deviceId);
 
 		URIBuilder builder = new URIBuilder();
-		String host="180.97.232.56";//203.84.197.25 http://210.51.31.67/youyun/simplepush
+		String host="180.97.232.56";//http://180.97.232.56/youyun/simplepush
 		//String host="table.finance.yahoo.com";
 		builder.setScheme("http").setHost(host)
 		.setPath("/youyun/simplepush")

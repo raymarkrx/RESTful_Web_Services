@@ -33,14 +33,6 @@ id="WebApp_ID" version="2.5">
       <taglib-location>/WEB-INF/tags/c.tld</taglib-location>
     </taglib>
   </jsp-config>
-  <servlet>
-    <servlet-name>jsonEventServlet</servlet-name>
-    <servlet-class>com.aichuche.servlet.JsonEventServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>jsonEventServlet</servlet-name>
-    <url-pattern>/json</url-pattern>
-  </servlet-mapping>
   
   <servlet>
     <servlet-name>reportdataServlet</servlet-name>
