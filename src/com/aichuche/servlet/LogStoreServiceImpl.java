@@ -82,7 +82,7 @@ public class LogStoreServiceImpl
         	
         	long x2= System.currentTimeMillis();
 			
-			System.out.println("==producer.send："+(x2-x1));
+			System.out.println("==producer.send(ms)："+(x2-x1));
     	}catch(Exception e){
     		e.printStackTrace();
     	}
