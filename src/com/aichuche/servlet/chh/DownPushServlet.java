@@ -207,9 +207,13 @@ public class DownPushServlet extends HttpServlet {
 		         	log.debug("4-cost(ms):"+(t2-t1));
 		         	t1=System.currentTimeMillis();
 		         
-		         	
-		         int return_code=(int)JSONUtils.StringToJSONOBject(revokeReturnMesg).get("return_code");
-		         String return_message=(String)JSONUtils.StringToJSONOBject(revokeReturnMesg).get("return_message");
+		         	//初始化返回值
+		         	Integer return_code=null;
+		         	String return_message=null;
+		         	if(status.equals("1")){
+		         		 return_code=(int)JSONUtils.StringToJSONOBject(revokeReturnMesg).get("return_code");
+		         		 return_message=(String)JSONUtils.StringToJSONOBject(revokeReturnMesg).get("return_message");
+		         	}
 		         result.put("return_code", return_code);
 				 result.put("return_message",return_message);
 				 result.put("messageId1",messageid1);
