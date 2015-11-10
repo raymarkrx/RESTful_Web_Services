@@ -27,14 +27,14 @@ import com.chh.utils.PrintUtils;
  *  
  * 只是写的一个示例，filePath,和FileName根据需要进行调整。
  */
-public class RevokeServlet {
+public class testRevokeServlet {
 
     /**
      * @param args
      * @throws Exception 
      */
     public static void main(String[] args) throws Exception {
-    	RevokeServlet.revokeWebService103();
+    	testRevokeServlet.revokeWebService103();
     }
     
     public static String  revokeWebService103() throws Exception{

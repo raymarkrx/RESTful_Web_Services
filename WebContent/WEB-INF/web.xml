@@ -41,6 +41,7 @@ id="WebApp_ID" version="2.5">
     <servlet-name>jsonEventServlet</servlet-name>
     <url-pattern>/json</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <servlet-name>reportdataServlet</servlet-name>
     <servlet-class>com.aichuche.servlet.chh.ReportDataServlet</servlet-class>
@@ -49,6 +50,7 @@ id="WebApp_ID" version="2.5">
     <servlet-name>reportdataServlet</servlet-name>
     <url-pattern>/reportdata</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <servlet-name>connectChangedServlet</servlet-name>
     <servlet-class>com.aichuche.servlet.chh.ConnectChangedServlet</servlet-class>
@@ -57,22 +59,17 @@ id="WebApp_ID" version="2.5">
     <servlet-name>connectChangedServlet</servlet-name>
     <url-pattern>/connect_changed</url-pattern>
   </servlet-mapping>
+  
   <servlet>
-    <servlet-name>simplePushServlet</servlet-name>
-    <servlet-class>com.aichuche.servlet.chh.SimplePushServlet</servlet-class>
+    <servlet-name>downpushServlet</servlet-name>
+    <servlet-class>com.aichuche.servlet.chh.DownPushServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>simplePushServlet</servlet-name>
-    <url-pattern>/simplepush</url-pattern>
+    <servlet-name>downpushServlet</servlet-name>
+    <url-pattern>/downpushServlet</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>simplePushRevokeServlet</servlet-name>
-    <servlet-class>com.aichuche.servlet.chh.SimplePushRevokeServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>simplePushRevokeServlet</servlet-name>
-    <url-pattern>/simplepush_revoke</url-pattern>
-  </servlet-mapping>
+
+  
   <servlet>
     <servlet-name>testServlet</servlet-name>
     <servlet-class>com.aichuche.servlet.chh.TestServlet</servlet-class>
