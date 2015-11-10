@@ -287,7 +287,7 @@ public class DownPushServlet extends HttpServlet {
 		//log.debug("===deviceId:"+deviceId);
 
 		URIBuilder builder = new URIBuilder();
-		String host="210.51.31.67";//203.84.197.25 http://210.51.31.67/youyun/simplepush
+		String host="180.97.232.56";//203.84.197.25 http://210.51.31.67/youyun/simplepush
 		//String host="table.finance.yahoo.com";
 		builder.setScheme("http").setHost(host)
 		.setPath("/youyun/simplepush")
