@@ -125,7 +125,7 @@ public class testServlet_data101_batch {
 	         //调用webService
 	         revokeServletData101(keyValues);
         	
-        	Thread.sleep(1000*1);
+        	Thread.sleep(2000*1);
         } 
         
         //System.out.println("=====================OVER================");
