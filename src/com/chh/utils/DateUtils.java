@@ -408,7 +408,7 @@ public class DateUtils {
     }
     
 	public static void main(String[] args) throws Exception {
-		
+		System.out.println(getUnixTimestampFromLocalTimeDate2("20151112130016"));
 	}
 
     /**
