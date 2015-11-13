@@ -121,7 +121,7 @@ public class ReportData103Servlet extends HttpServlet {
 				DataTypeID = EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1, 0, 1));
 				Date = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 1, 4));
 				Message_ID = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 5, 4));
-				Return_code = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 9, 1));
+				Return_code = EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1, 9, 1));
 
 				StringBuilder sb2 = new StringBuilder();
 				sb2.append(DataTypeID + ",");
@@ -163,7 +163,7 @@ public class ReportData103Servlet extends HttpServlet {
 	         	int r=pst.executeUpdate();
 	         	pst.close();
 				
-	         	log.debug("update rows: "+r+", status:"+status);
+	         	log.debug("更新103消息对应的下发命令的status( 2:执行成功, -2:执行失败 ) . update rows: "+r+", status:"+status);
 	         	
 				result.put("return_code", 0);
 				result.put("return_message","success");
@@ -171,7 +171,7 @@ public class ReportData103Servlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("return_code", -1);
-			result.put("return_message", e.getMessage());
+			result.put("return_message", "failed "+e.getMessage());
 		}
 			String temp=JSONUtils.toJSONString(result);
 			temp=temp.replace("[", "");
