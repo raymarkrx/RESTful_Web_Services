@@ -115,13 +115,13 @@ public class ReportData103Servlet extends HttpServlet {
 				Return_code = Integer.parseInt(data.split(",")[3]);
 			} else {
 				RAWDATA = request.getParameter("data");
-				log.debug("RAWDATA:"+RAWDATA);
 				byte[] result1 = EncodeUtils.base64Decode(RAWDATA);
+				log.debug(" 上报103消息（103消息返回下发命令的执行结果） RAWDATA:"+RAWDATA+",转为byte[] 后的lenght:"+result1.length);
 
 				DataTypeID = EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1, 0, 1));
 				Date = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 1, 4));
 				Message_ID = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 5, 4));
-				Return_code = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 9, 4));
+				Return_code = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 9, 1));
 
 				StringBuilder sb2 = new StringBuilder();
 				sb2.append(DataTypeID + ",");
@@ -130,7 +130,7 @@ public class ReportData103Servlet extends HttpServlet {
 				sb2.append(Return_code); // 最后一个不要加 ;
 
 				data = sb2.toString();
-				log.debug("ReportData103Servlet data:"+data);
+				log.debug("解析后的 data:"+data+" ,分为：DataTypeID"+DataTypeID+" ,Date:"+Date+" ,Message_ID:"+Message_ID+" ,Return_code:"+Return_code);
 
 				StringBuilder sb = new StringBuilder();
 				for (int i = 0; i < result1.length && i < 53; i++) {
