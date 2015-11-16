@@ -51,6 +51,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParser.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.aichuche.servlet.chh.model.SimplepushReturnMessageBean;
 import com.aichuche.util.UtilData;
 import com.chh.utils.DateUtils;
 import com.chh.utils.DbUtils;
@@ -60,6 +61,7 @@ import com.chh.utils.JSONUtils;
 import com.chh.utils.PrintUtils;
 import com.chh.utils.PropertiesUtils;
 import com.chh.utils.encoding.EncodeUtils;
+import com.google.gson.Gson;
 
 public class DownPushServlet extends HttpServlet {
 	
@@ -177,11 +179,18 @@ public class DownPushServlet extends HttpServlet {
 		         keyValues.put("data", dataRAW);
 		         //这里是同步调用,不是异步
 		         String status="0";
-		         String revokeReturnMesg="";
+		         String revokeReturnJson="";
 		         try{
-		        	 revokeReturnMesg=revokeWebService(urlPath,keyValues);
-		        	 log.debug("revoke return:"+revokeReturnMesg);
-		        	 status="1";
+		        	 revokeReturnJson=revokeWebService(urlPath,keyValues);
+		        	 log.debug("revoke return:"+revokeReturnJson);
+		        	 Gson gson = new Gson();
+		        	 SimplepushReturnMessageBean bean = gson.fromJson(revokeReturnJson, SimplepushReturnMessageBean.class);
+		        	 log.debug("Simplepush .return_code :"+bean.getReturn_code());
+		        	 if("0".equals(bean.getReturn_code())){
+		        		 status="1";
+		        	 }else{
+		        		 status="-1";
+		        	 }
 		         }catch(Exception e){
 		        	 e.printStackTrace();
 		        	 status="-1";
@@ -196,7 +205,7 @@ public class DownPushServlet extends HttpServlet {
 		         pst = (PreparedStatement) conn.prepareStatement(sql);  
 		         	pst.setString(1, status);
 		         	pst.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));
-		         	pst.setString(3,revokeReturnMesg);
+		         	pst.setString(3,revokeReturnJson);
 		         	pst.setString(4,messageid1);
 		         	pst.setString(5,messageid2);
 		         	pst.execute();
@@ -211,8 +220,8 @@ public class DownPushServlet extends HttpServlet {
 		         	Integer return_code=null;
 		         	String return_message=null;
 		         	if(status.equals("1")){
-		         		 return_code=(int)JSONUtils.StringToJSONOBject(revokeReturnMesg).get("return_code");
-		         		 return_message=(String)JSONUtils.StringToJSONOBject(revokeReturnMesg).get("return_message");
+		         		 return_code=(int)JSONUtils.StringToJSONOBject(revokeReturnJson).get("return_code");
+		         		 return_message=(String)JSONUtils.StringToJSONOBject(revokeReturnJson).get("return_message");
 		         	}
 		         result.put("return_code", return_code);
 				 result.put("return_message",return_message);

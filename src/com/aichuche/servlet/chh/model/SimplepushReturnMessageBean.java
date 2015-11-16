@@ -5,6 +5,12 @@ public class SimplepushReturnMessageBean {
 	private String return_message;
 	private String data;
 	
+	public SimplepushReturnMessageBean(String return_code,String return_message,String data){
+		this.return_code=return_code;
+		this.return_message=return_message;
+		this.data=data;
+	}
+	
 	public String getReturn_code() {
 		return return_code;
 	}
