@@ -200,6 +200,7 @@ public class DownPushServlet extends HttpServlet {
 		        	 }
 		         }catch(Exception e){
 		        	 e.printStackTrace();
+		        	 revokeReturnJson=e.getMessage();
 		        	 status="-1";
 		         }
 		         
