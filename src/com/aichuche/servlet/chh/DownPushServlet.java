@@ -81,6 +81,13 @@ public class DownPushServlet extends HttpServlet {
 	
 	private static String yyyyMMdd = "[0-9]{8}";
 	
+	public static void main(String[] args) throws Exception {
+		String revokeReturnJson="{ \"return_code\": -1020245, \"return_message\": \"\", \"data\": { } }";
+   	 Gson gson = new Gson();
+	 SimplepushReturnMessageBean bean = gson.fromJson(revokeReturnJson, SimplepushReturnMessageBean.class);
+	 log.debug("Simplepush .return_code :"+bean.getReturn_code());
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response)
