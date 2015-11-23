@@ -281,7 +281,7 @@ import org.apache.http.protocol.ExecutionContext;
  
    public static void main(String[] args) {
      try {
-       String url = "http://api.map.baidu.com/geocoder/v2/?ak=tvneSluSZWnSdhTeRdW63Nv7&output=json&coordtype=wgs84ll&pois=1&location=31.409676,121.254782";
+       String url = "http://quote.eastmoney.com/center/BKList.html";
        String str = executeGet(url);
        System.out.println(str);
      } catch (Exception e) {
