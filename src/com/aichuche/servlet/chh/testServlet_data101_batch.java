@@ -63,7 +63,7 @@ public class testServlet_data101_batch {
     		int DataTypeID=101;
     		int Date=Integer.valueOf(currentDateUnixTimestamp);
     		String Ax=ax;
-    		String Ay="10.6512";//4位小数
+    		String Ay="-10.6512";//4位小数
     		//String Ay="-0.6512";//4位小数
     		String Az="9.3278";
     		String Wx="-0.0097";
@@ -127,7 +127,7 @@ public class testServlet_data101_batch {
 	         //调用webService
 	         revokeServletData101(keyValues);
         	
-        	Thread.sleep(1000*1);
+        	Thread.sleep(2000*1);
         } 
         
         //System.out.println("=====================OVER================");
