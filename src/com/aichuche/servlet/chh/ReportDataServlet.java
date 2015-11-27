@@ -195,7 +195,7 @@ public class ReportDataServlet extends HttpServlet {
 						 //log.debug("字节数组长度："+result1.length);
 						//printRAWDATA101(result1);
 						long a1=System.currentTimeMillis(); 
-						sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
+						data=sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
 						long a2=System.currentTimeMillis(); 
 						log.debug("==sendRAWDATA101 cost(ms)："+(a2-a1));
 					}
@@ -256,12 +256,18 @@ public class ReportDataServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		long webService_leave_date= System.currentTimeMillis();
 		
 		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
 		if(deviceId.equals("chhTestData101")){
-			String nowTime=DateUtils.getCurrentDateStr2();
-			mapTmp.put("createTime", createTime);
-			updateTestData101ToMysql(mapTmp);
+			long x6= System.currentTimeMillis();
+			mapTmp.put("mesg_date", createTime);
+			mapTmp.put("webService_receive_date", String.valueOf(beginTime));
+			mapTmp.put("webService_leave_date", String.valueOf(webService_leave_date));
+			mapTmp.put("message", data);
+			putTestData101ToMysql(mapTmp);
+			long x7= System.currentTimeMillis();
+			log.debug("=== insert tm_monitor_data101  cost(ms)："+(x7-x6));
 		}
 		
 		long endTime=System.currentTimeMillis(); 
@@ -320,7 +326,7 @@ public class ReportDataServlet extends HttpServlet {
 		return responseQuotes;
 	}
 	
-	private void sendRAWDATA101(String deviceId,String messageId,String dataType,String createTime,byte[] result1) throws Exception {
+	private String sendRAWDATA101(String deviceId,String messageId,String dataType,String createTime,byte[] result1) throws Exception {
 		long x1 = System.currentTimeMillis();
 		
 		// 定义data101
@@ -368,7 +374,6 @@ public class ReportDataServlet extends HttpServlet {
 		long x2 = System.currentTimeMillis();
 		log.debug("==sendRAWDATA101_bytesToInt cost(ms)："+(x2-x1));
 		
-
 		StringBuilder sb2 = new StringBuilder();
 		sb2.append(DataTypeID + ",");
 		sb2.append(Date + ",");
@@ -401,16 +406,6 @@ public class ReportDataServlet extends HttpServlet {
 		String partitionKey=deviceId;
 		log.debug("sendRAWDATA101_reportData101 mesg:" + mesg); 
 		
-		//将验证链路是否畅通的消息insert到msyql,以deviceId=chhTestData101 为区分
-		if(deviceId.equals("chhTestData101")){
-			long x6= System.currentTimeMillis();
-			mapTmp.put("mesg_date", createTime);
-			mapTmp.put("message", mesg);
-			putTestData101ToMysql(mapTmp);
-			long x7= System.currentTimeMillis();
-			log.debug("=== insert tm_monitor_data101  cost(ms)："+(x7-x6));
-		}
-		
 //		LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
 //		dataMap.put("partitionKey", deviceId);
 //		dataMap.put("mesg", mesg);
@@ -432,30 +427,21 @@ public class ReportDataServlet extends HttpServlet {
 		//long x5= System.currentTimeMillis();
 		//log.debug("==RedisClient.testOrder  cost(ms)："+(x5-x4));
 		
+		return mesg;
 	}
 	
 	public void putTestData101ToMysql(HashMap<String,String> mapTmp ){
+		long x6= System.currentTimeMillis();
 		String mesg_date=mapTmp.get("mesg_date");
    	 	String message=mapTmp.get("message");
-		 String sql="insert into tm_monitor_data101(mesg_date,webService_receive_date,message)  values(?,?,?)";
-	   	 Object[] params  = new Object[] { mesg_date,DateUtils.getDate2FromMilliseconds(System.currentTimeMillis()),message};
+   	 	long webService_receive_date=Long.valueOf(mapTmp.get("webService_receive_date"));
+   	 	long webService_leave_date=Long.valueOf(mapTmp.get("webService_leave_date"));
+		 String sql="insert into tm_monitor_data101(mesg_date,webService_receive_date,webService_leave_date,message)  values(?,?,?,?)";
+	   	 Object[] params  = new Object[] { mesg_date,DateUtils.getDate2FromMilliseconds(webService_receive_date),DateUtils.getDate2FromMilliseconds(webService_leave_date),message};
 		 MysqlClient.executeUpdate(connProvider, sql, params);
+		 long x7= System.currentTimeMillis();
+		 log.debug("==insert chhTestData101  into  tm_monitor_data101`s   cost(ms)："+(x7-x6));
 	}
-	
-	public void updateTestData101ToMysql(HashMap<String,String> mapTmp ){
-		long x6= System.currentTimeMillis();
-		
-		 String mesg_date=mapTmp.get("createTime");
-		 String sql="update  tm_monitor_data101 set webService_leave_date=? where mesg_date=?"; 
-	   	 Object[] params  = new Object[] { DateUtils.getDate2FromMilliseconds(System.currentTimeMillis()),mesg_date};
-		 MysqlClient.executeUpdate(connProvider, sql, params);
-		
-        	long x7= System.currentTimeMillis();
-        	log.debug("==update  tm_monitor_data101`s webService_leave_date  cost(ms)："+(x7-x6));
-        	
-	}
-
-
 
 	private void printRAWDATA101(byte[] result1) throws IOException {
 
