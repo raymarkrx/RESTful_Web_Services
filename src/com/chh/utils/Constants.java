@@ -14,6 +14,7 @@ public class Constants
   public static final String FAILED_SIGN = "FAILED";
   public static final String SEPARATOR = ",";
   public static final String USE_HTTP_PROXY = "1";
+  public static final String MYSQLSOURCE = "mysqlSource";
 }
 
 /* Location:           D:\saic_days_2015\MR程序\lbs2poi\2poi\LBSPoiJobService.jar

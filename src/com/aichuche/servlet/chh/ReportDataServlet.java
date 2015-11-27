@@ -71,6 +71,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 
 
+
 import chh.utils.db.source.DataSourceProvider;
 import chh.utils.db.source.common.ConnectionProvider;
 import chh.utils.mysql.MysqlClient;
@@ -78,13 +79,13 @@ import chh.utils.mysql.MysqlClient;
 import com.aichuche.servlet.LogStoreServiceImpl;
 import com.aichuche.util.UtilData;
 import com.chh.utils.C3P0Utils;
+import com.chh.utils.Constants;
 import com.chh.utils.DateUtils;
 import com.chh.utils.HttpUtil;
 import com.chh.utils.JSONUtils;
 import com.chh.utils.PrintUtils;
 import com.chh.utils.PropertiesUtils;
 import com.chh.utils.encoding.EncodeUtils;
-import com.redis.Constants;
 import com.redis.RedisClient;
 
 public class ReportDataServlet extends HttpServlet {
@@ -368,7 +369,6 @@ public class ReportDataServlet extends HttpServlet {
 		log.debug("==sendRAWDATA101_bytesToInt cost(ms)："+(x2-x1));
 		
 
-
 		StringBuilder sb2 = new StringBuilder();
 		sb2.append(DataTypeID + ",");
 		sb2.append(Date + ",");
@@ -435,76 +435,24 @@ public class ReportDataServlet extends HttpServlet {
 	}
 	
 	public void putTestData101ToMysql(HashMap<String,String> mapTmp ){
-		
 		String mesg_date=mapTmp.get("mesg_date");
    	 	String message=mapTmp.get("message");
 		 String sql="insert into tm_monitor_data101(mesg_date,webService_receive_date,message)  values(?,?,?)";
-	   	 Object[] params  = new Object[] { mesg_date,DateUtils.getDate2FromMilliseconds(System.currentTimeMillis())};
+	   	 Object[] params  = new Object[] { mesg_date,DateUtils.getDate2FromMilliseconds(System.currentTimeMillis()),message};
 		 MysqlClient.executeUpdate(connProvider, sql, params);
-		
-		
-         conn =C3P0Utils.getConnection(); 
-         pst = null;
-        try {
-        	 if(conn != null){
-        	 String sql="insert into tm_monitor_data101(mesg_date,webService_receive_date,message)  values(?,?,?)";
-        	 String mesg_date=mapTmp.get("mesg_date");
-        	 String message=mapTmp.get("message");
-        	 
-         	pst = (PreparedStatement) conn.prepareStatement(sql);  
-         	pst.setTimestamp(1,new Timestamp(DateUtils.getMillisecondsFromLocalTimeDate(mesg_date)));
-         	pst.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-         	pst.setString(3, message);
-         	pst.execute();
-         	
-         	//log.debug("  insert  tm_monitor_data101 ,OK");
-            }else{
-            	log.debug("   conn is null");
-            }
-        } catch (Exception e) { 
-        	log.debug(e.getMessage());
-            e.printStackTrace();
-        }finally{
-        	try {
-        		if(pst!=null)pst.close();
-        		if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-        }
 	}
 	
 	public void updateTestData101ToMysql(HashMap<String,String> mapTmp ){
 		long x6= System.currentTimeMillis();
 		
-        conn =C3P0Utils.getConnection(); 
-        pst = null;
-       try {
-       	 if(conn != null){
-       	 String sql="update  tm_monitor_data101 set webService_leave_date=? where mesg_date=?";
-    	 String mesg_date=mapTmp.get("createTime");
-       	 
-        	pst = (PreparedStatement) conn.prepareStatement(sql);  
-        	pst.setTimestamp(1, new java.sql.Timestamp(System.currentTimeMillis()));
-        	pst.setTimestamp(2,new Timestamp(DateUtils.getMillisecondsFromLocalTimeDate(mesg_date)));
-        	pst.execute();
-        	
+		 String mesg_date=mapTmp.get("createTime");
+		 String sql="update  tm_monitor_data101 set webService_leave_date=? where mesg_date=?"; 
+	   	 Object[] params  = new Object[] { DateUtils.getDate2FromMilliseconds(System.currentTimeMillis()),mesg_date};
+		 MysqlClient.executeUpdate(connProvider, sql, params);
+		
         	long x7= System.currentTimeMillis();
         	log.debug("==update  tm_monitor_data101`s webService_leave_date  cost(ms)："+(x7-x6));
-           }else{
-           	log.debug("   conn is null");
-           }
-       } catch (Exception e) { 
-       	log.debug(e.getMessage());
-           e.printStackTrace();
-       }finally{
-       	try {
-       		if(pst!=null)pst.close();
-       		if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-       }
+        	
 	}
 
 
