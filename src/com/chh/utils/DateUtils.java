@@ -230,6 +230,23 @@ public class DateUtils {
     	  return new java.util.Date(timestamp);
     } 
     
+    
+
+    public static String getDateFromMilliseconds(long UTCTimeInMillis) {
+	   java.util.Calendar c = java.util.Calendar.getInstance();
+	 c.setTimeInMillis(UTCTimeInMillis);
+	 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	 return df.format(c.getTime());
+    }
+    
+    //根据毫秒值得到带毫秒的date字符串
+    public static String getDate2FromMilliseconds(long UTCTimeInMillis) {
+	   java.util.Calendar c = java.util.Calendar.getInstance();
+	 c.setTimeInMillis(UTCTimeInMillis);
+	 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+	 return df.format(c.getTime());
+    }
+    
 
     
 

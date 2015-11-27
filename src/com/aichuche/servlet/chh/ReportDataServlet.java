@@ -69,6 +69,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 
 
+
+
+import chh.utils.db.source.DataSourceProvider;
+import chh.utils.db.source.common.ConnectionProvider;
+import chh.utils.mysql.MysqlClient;
+
 import com.aichuche.servlet.LogStoreServiceImpl;
 import com.aichuche.util.UtilData;
 import com.chh.utils.C3P0Utils;
@@ -78,6 +84,7 @@ import com.chh.utils.JSONUtils;
 import com.chh.utils.PrintUtils;
 import com.chh.utils.PropertiesUtils;
 import com.chh.utils.encoding.EncodeUtils;
+import com.redis.Constants;
 import com.redis.RedisClient;
 
 public class ReportDataServlet extends HttpServlet {
@@ -100,7 +107,9 @@ public class ReportDataServlet extends HttpServlet {
 	private static Producer<String, String> producer = null;  
 	private static HashMap<String,String> mapTmp=new HashMap<String,String>();
 	private static Connection conn;   
-	private static PreparedStatement pst;  
+	private static PreparedStatement pst; 
+	
+	private static ConnectionProvider connProvider = DataSourceProvider.prepare(Constants.MYSQLSOURCE);
 
 	static {
 		topic = PropertiesUtils.getValue("reportdata.topic");
@@ -426,6 +435,14 @@ public class ReportDataServlet extends HttpServlet {
 	}
 	
 	public void putTestData101ToMysql(HashMap<String,String> mapTmp ){
+		
+		String mesg_date=mapTmp.get("mesg_date");
+   	 	String message=mapTmp.get("message");
+		 String sql="insert into tm_monitor_data101(mesg_date,webService_receive_date,message)  values(?,?,?)";
+	   	 Object[] params  = new Object[] { mesg_date,DateUtils.getDate2FromMilliseconds(System.currentTimeMillis())};
+		 MysqlClient.executeUpdate(connProvider, sql, params);
+		
+		
          conn =C3P0Utils.getConnection(); 
          pst = null;
         try {
