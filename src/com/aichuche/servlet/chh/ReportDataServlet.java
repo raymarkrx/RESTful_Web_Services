@@ -267,7 +267,7 @@ public class ReportDataServlet extends HttpServlet {
 			mapTmp.put("message", data);
 			putTestData101ToMysql(mapTmp);
 			long x7= System.currentTimeMillis();
-			log.debug("=== insert tm_monitor_data101  cost(ms)："+(x7-x6));
+			log.debug("=== insert chhTestData101 to tm_monitor_data101(mysql)   cost(ms)："+(x7-x6));
 		}
 		
 		long endTime=System.currentTimeMillis(); 
@@ -431,7 +431,6 @@ public class ReportDataServlet extends HttpServlet {
 	}
 	
 	public void putTestData101ToMysql(HashMap<String,String> mapTmp ){
-		long x6= System.currentTimeMillis();
 		String mesg_date=mapTmp.get("mesg_date");
    	 	String message=mapTmp.get("message");
    	 	long webService_receive_date=Long.valueOf(mapTmp.get("webService_receive_date"));
@@ -439,8 +438,6 @@ public class ReportDataServlet extends HttpServlet {
 		 String sql="insert into tm_monitor_data101(mesg_date,webService_receive_date,webService_leave_date,message)  values(?,?,?,?)";
 	   	 Object[] params  = new Object[] { mesg_date,DateUtils.getDate2FromMilliseconds(webService_receive_date),DateUtils.getDate2FromMilliseconds(webService_leave_date),message};
 		 MysqlClient.executeUpdate(connProvider, sql, params);
-		 long x7= System.currentTimeMillis();
-		 log.debug("==insert chhTestData101  into  tm_monitor_data101`s   cost(ms)："+(x7-x6));
 	}
 
 	private void printRAWDATA101(byte[] result1) throws IOException {
