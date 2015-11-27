@@ -39,7 +39,7 @@ public class testServlet_data101_batch {
         a.add("3,30");//s5
         
         Random rand = new Random();
-        for(int i=0;i<99999;i=i+1){
+        for(int i=0;i<100;i=i+1){
         	int j=i%a.size();
         	String b=a.get(j);
         	String[] c=b.split(",");
@@ -54,8 +54,8 @@ public class testServlet_data101_batch {
         	//String deviceId     =i%2==0?"+86test_1":"+86test_2";
         	//String deviceId  ="test8618616969935"+rand.nextInt(99); 352273017386360 
         	
-        	//String deviceId  =DEFAULT_TEST;//deviceId字段
-        	String deviceId  ="352273017386360";//deviceId字段
+        	String deviceId  =DEFAULT_TEST;//deviceId字段
+        	//String deviceId  ="352273017386360";//deviceId字段
  			String messageId="0";//递增的序列
  			String dataType="2";//表示二进制的加密后的数据
  			String data;//这个字段由下面的字段构成
@@ -127,7 +127,7 @@ public class testServlet_data101_batch {
 	         //调用webService
 	         revokeServletData101(keyValues);
         	
-        	Thread.sleep(2000*1);
+        	Thread.sleep(10*1);
         } 
         
         //System.out.println("=====================OVER================");
