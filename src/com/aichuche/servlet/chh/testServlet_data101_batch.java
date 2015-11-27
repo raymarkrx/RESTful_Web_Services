@@ -39,7 +39,7 @@ public class testServlet_data101_batch {
         a.add("3,30");//s5
         
         Random rand = new Random();
-        for(int i=0;i<100;i=i+1){
+        for(int i=0;i<10;i=i+1){
         	int j=i%a.size();
         	String b=a.get(j);
         	String[] c=b.split(",");
