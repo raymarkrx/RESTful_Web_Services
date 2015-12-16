@@ -457,8 +457,8 @@ public class ReportDataServlet extends HttpServlet {
 		String GPSX;
 		String GPSY;
 		String Speed;
-		String hgJiao;//横滚角 2个字节
 		String fyJiao;//俯仰角 2个字节
+		String hgJiao;//横滚角 2个字节
 		String hxJiao;//航向角 2个字节
 
 		DataTypeID = EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1, 0, 1));
@@ -480,8 +480,8 @@ public class ReportDataServlet extends HttpServlet {
 			fyJiao ="0";
 			hxJiao ="0";
 		}else{//新格式的数据是65个字节，加了3个字段，每个字段4个字节
-			hgJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
-			fyJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
+			fyJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
+			hgJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
 			hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
 		}
 
@@ -500,8 +500,8 @@ public class ReportDataServlet extends HttpServlet {
 		log.debug("解码格式化后,第41-44个字节(GPSX)：" + GPSX);
 		log.debug("解码格式化后,第45-48个字节(GPSY)：" + GPSY);
 		 log.debug("解码后,第49-52个字节："+ Speed );
-		log.debug("解码后,第53-56个字节(hgJiao)：" + hgJiao);
-		log.debug("解码后,第57-60个字节(fyJiao)：" + fyJiao);
+		log.debug("解码后,第53-56个字节(fyJiao)：" + fyJiao);
+		log.debug("解码后,第57-60个字节(hgJiao)：" + hgJiao);
 		 log.debug("解码后,第61-64个字节(hxJiao)："+ hxJiao );
 
 	}

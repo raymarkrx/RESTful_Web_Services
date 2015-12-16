@@ -166,7 +166,7 @@ public class ConnectChangedServlet extends HttpServlet {
 //				LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>)JSONTool.convertJsonToObject(jsonStr);
 				LinkedHashMap<String,String> dataMap = new LinkedHashMap<String,String>();
 				String mesg=deviceId+";"+type;
-				PrintUtils.print("ConnectChanged mesg："+mesg);
+				PrintUtils.print("ConnectChanged  deviceId:"+deviceId+"  type:"+type);
 	            dataMap.put("mesg",  mesg);
 				
 				//LogStoreService logStoreService = BeanContext.getInstance().getBean(UtilData.Service.LOG_STORE_SERVICE_BEAN_NAME, LogStoreService.class);
