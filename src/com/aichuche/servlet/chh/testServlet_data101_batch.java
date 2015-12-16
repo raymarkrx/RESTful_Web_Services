@@ -57,7 +57,7 @@ public class testServlet_data101_batch {
         	String deviceId  =DEFAULT_TEST;//deviceId字段
         	//String deviceId  ="352273017386360";//deviceId字段
  			String messageId="0";//递增的序列
- 			String dataType="2";//表示二进制的加密后的数据
+ 			String dataType="2";//2:表示base64编码后的数据 ，1：表示值透传，无编码传过来
  			String data;//这个字段由下面的字段构成
         	// 定义data的明细字段
     		int DataTypeID=101;
