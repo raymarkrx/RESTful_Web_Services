@@ -232,7 +232,7 @@ public class ReportDataServlet extends HttpServlet {
 //					log.debug("101 message OVER:" );
 					synchronized (obj) {
 						 log.debug("字节数组长度："+result1.length);
-						printRAWDATA101(result1);
+						//printRAWDATA101(result1);
 						long a1=System.currentTimeMillis(); 
 						data=sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
 						long a2=System.currentTimeMillis(); 
