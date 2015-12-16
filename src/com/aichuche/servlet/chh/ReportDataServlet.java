@@ -169,8 +169,54 @@ public class ReportDataServlet extends HttpServlet {
 		int DataTypeID; // 根据这个DataTypeID判断消息的类型，发送到指定的kafka的topic
 		
 		try {
-			if ("1".equals(dataType)) {//没有压缩的情况
+			if ("1".equals(dataType)) {//值透传的情况
 				data = request.getParameter("data");
+				//根据data的类型不同，不同方法处理
+				DataTypeID =Integer.parseInt(data.split(",")[0]);
+				
+				Map<String, String> keyValues=new HashMap<String, String>();
+		         keyValues.put("deviceId", deviceId);//
+		         keyValues.put("messageId", messageId);
+		         keyValues.put("dataType", dataType);
+		         keyValues.put("data", data);
+		         keyValues.put("createTime", createTime);
+				if(DataTypeID==101){
+//					log.debug("get 101 message  deviceId:"+deviceId );
+//					log.debug("messageId:"+messageId );
+//					log.debug("dataType:"+dataType );
+//					log.debug("RAWDATA:"+RAWDATA );
+//					log.debug("==RAWDATA byte.length:"+result1.length );
+//					log.debug("101 message OVER:" );
+					synchronized (obj) {
+						 log.debug("值透传 的情况 data："+data);
+						long a1=System.currentTimeMillis(); 
+						data=sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
+						long a2=System.currentTimeMillis(); 
+						log.debug("==sendRAWDATA101 cost(ms)："+(a2-a1));
+					}
+				}else if(DataTypeID==102){
+					
+				}else if(DataTypeID==103){
+					long a3=System.currentTimeMillis(); 
+					log.debug(" \n get 103 message  deviceId:"+deviceId );
+					log.debug("messageId:"+messageId );
+					log.debug("dataType:"+dataType );
+					log.debug("RAWDATA:"+RAWDATA );
+					log.debug("==RAWDATA byte.length:"+result1.length );
+			         String revokeReturnMesg="";
+			         try{
+			        	 String url="";
+			        	 revokeReturnMesg=revokeWebService103(url,keyValues);
+			        	 long a4=System.currentTimeMillis(); 
+						 log.debug("==revokeWebService103 cost(ms)："+(a4-a3));
+			         }catch(Exception e){
+			        	 e.printStackTrace();
+			         }
+				}
+				
+				
+				result.put("return_code", 0);
+				result.put("return_message", "success");
 			} else {
 				RAWDATA = request.getParameter("data");
 				byte[] result1 = EncodeUtils.base64Decode(RAWDATA);//解密为byte数组
@@ -226,11 +272,11 @@ public class ReportDataServlet extends HttpServlet {
 			
 		} catch (Exception e) {
 			log.info("can not read webService`s Data format", e);
+			String mesg = deviceId + ";" + messageId + ";" + dataType + ";" + data + ";" + createTime;
+			PrintUtils.print("NOW ERROR MESG TO KAFKA!! reportData mesg：" + mesg);
 			e.printStackTrace();
 			try {
 				LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
-				String mesg = deviceId + ";" + messageId + ";" + dataType + ";" + data + ";" + createTime;
-				PrintUtils.print("NOW ERROR MESG TO KAFKA!! reportData mesg：" + mesg);
 				dataMap.put("mesg", mesg);
 
 				// LogStoreService logStoreService =
@@ -245,8 +291,9 @@ public class ReportDataServlet extends HttpServlet {
 				result.put("return_message", "success");
 			} catch (Exception e1) {// kafka的报错 则抛出
 				e1.printStackTrace();
-				result.put("return_code", -1);
-				result.put("return_message", e.getMessage());
+				result.put("return_code", 0);
+				result.put("return_message", "success");
+				//这时候kafka报错的数据应该insert到mysql
 			}
 		}
 		String temp = JSONUtils.MapToJSONString(result);
@@ -429,6 +476,111 @@ public class ReportDataServlet extends HttpServlet {
 		
 		return mesg;
 	}
+	
+	private String sendDATA101(String deviceId,String messageId,String dataType,String createTime,String data) throws Exception {
+		long x1 = System.currentTimeMillis();
+		
+		// 定义data101
+		int DataTypeID;
+		int Date;
+		String Ax;
+		String Ay;
+		String Az;
+		String Wx;
+		String Wy;
+		String Wz;
+		String Tx;
+		String Ty;
+		String Tz;
+		String GPSX;
+		String GPSY;
+		String Speed;
+		String fyJiao;//俯仰角 
+		String hxJiao;//航向角
+		String hgJiao;//横滚角 
+
+		DataTypeID = EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1, 0, 1));
+		Date = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 1, 4));
+		Ax = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 5, 4)));
+		Ay = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 9, 4)));
+		Az = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 13, 4)));
+		Wx = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 17, 4)));
+		Wy = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 21, 4)));
+		Wz = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 25, 4)));
+		Tx = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 29, 4)));
+		Ty = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 33, 4)));
+		Tz = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 37, 4)));
+		GPSX = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4)));
+		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
+		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
+		if(result1.length<=53){//老格式的数据没有后面的3个字段，是53个字节
+			fyJiao ="500";//3个角度默认值：500
+			hgJiao = "500";
+			hxJiao ="500";
+		}else{//新格式的数据是65个字节，加了3个字段，每个字段4个字节
+			fyJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
+			hgJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
+			hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
+		}
+		long x2 = System.currentTimeMillis();
+		log.debug("==sendRAWDATA101_bytesToInt cost(ms)："+(x2-x1));
+		
+		StringBuilder sb2 = new StringBuilder();
+		sb2.append(DataTypeID + ",");
+		sb2.append(Date + ",");
+		sb2.append(Ax + ",");
+		sb2.append(Ay + ",");
+		sb2.append(Az + ",");
+		sb2.append(Wx + ",");
+		sb2.append(Wy + ",");
+		sb2.append(Wz + ",");
+		sb2.append(Tx + ",");
+		sb2.append(Ty + ",");
+		sb2.append(Tz + ",");
+		sb2.append(GPSX + ",");
+		sb2.append(GPSY + ",");
+		sb2.append(Speed + ",");
+		sb2.append(fyJiao +",");
+		sb2.append(hgJiao + ",");
+		sb2.append(hxJiao);// 最后一个不要加 ;
+
+		String data = sb2.toString();
+
+//		StringBuilder sb = new StringBuilder();
+//		for (int i = 0; i < result1.length && i < 53; i++) {
+//			sb.append("[" + i + "]:" + EncodeUtils.byteToInt(result1[i]));
+//			sb.append("\n");
+//		}
+//		log.debug("每个byte打印后的值：\n"+sb.toString());
+		
+		String mesg = deviceId + ";" + messageId + ";" + dataType + ";" + data + ";" + createTime;
+		String partitionKey=deviceId;
+		log.debug("sendRAWDATA101_reportData101 mesg:" + mesg); 
+		
+//		LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
+//		dataMap.put("partitionKey", deviceId);
+//		dataMap.put("mesg", mesg);
+//		LogStoreServiceImpl logStoreService = new LogStoreServiceImpl();
+//		logStoreService.sendToKafka(dataMap, topic, groupId);
+		
+		long x3 = System.currentTimeMillis();
+		
+		KeyedMessage<String, String> data2 = new KeyedMessage<String, String>(topic,partitionKey,mesg);  
+    	producer.send(data2);
+		
+		long x4= System.currentTimeMillis();
+		
+		log.debug("==sendRAWDATA101_sendToKafka cost(ms) ："+(x4-x3));
+		
+		//测试消息是否有序
+		//Map<String, Object> rtnMap =RedisClient.testOrder(deviceId, "ReportDataServlet",String.valueOf(Date));
+		//log.debug("ReportDataServlet_deviceId:"+deviceId+"最新倒序的20个unixtimestamp:"+rtnMap.get(deviceId));
+		//long x5= System.currentTimeMillis();
+		//log.debug("==RedisClient.testOrder  cost(ms)："+(x5-x4));
+		
+		return mesg;
+	}
+	
 	
 	public void putTestData101ToMysql(HashMap<String,String> mapTmp ){
 		String mesg_date=mapTmp.get("mesg_date");
