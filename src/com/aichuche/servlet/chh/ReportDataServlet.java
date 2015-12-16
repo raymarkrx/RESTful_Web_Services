@@ -171,6 +171,7 @@ public class ReportDataServlet extends HttpServlet {
 		try {
 			if ("1".equals(dataType)) {//值透传的情况
 				data = request.getParameter("data");
+				log.debug("值透传 的情况 data："+data);
 				//根据data的类型不同，不同方法处理
 				DataTypeID =Integer.parseInt(data.split(",")[0]);
 				
@@ -181,14 +182,7 @@ public class ReportDataServlet extends HttpServlet {
 		         keyValues.put("data", data);
 		         keyValues.put("createTime", createTime);
 				if(DataTypeID==101){
-//					log.debug("get 101 message  deviceId:"+deviceId );
-//					log.debug("messageId:"+messageId );
-//					log.debug("dataType:"+dataType );
-//					log.debug("RAWDATA:"+RAWDATA );
-//					log.debug("==RAWDATA byte.length:"+result1.length );
-//					log.debug("101 message OVER:" );
 					synchronized (obj) {
-						 log.debug("值透传 的情况 data："+data);
 						long a1=System.currentTimeMillis(); 
 						data=sendDATA101(deviceId,messageId,dataType,createTime,data);//处理data101的消息
 						long a2=System.currentTimeMillis(); 
