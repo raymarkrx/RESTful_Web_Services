@@ -190,9 +190,9 @@ public class ReportDataServlet extends HttpServlet {
 					synchronized (obj) {
 						 log.debug("值透传 的情况 data："+data);
 						long a1=System.currentTimeMillis(); 
-						data=sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
+						data=sendDATA101(deviceId,messageId,dataType,createTime,data);//处理data101的消息
 						long a2=System.currentTimeMillis(); 
-						log.debug("==sendRAWDATA101 cost(ms)："+(a2-a1));
+						log.debug("==sendDATA101 cost(ms)："+(a2-a1));
 					}
 				}else if(DataTypeID==102){
 					
@@ -201,8 +201,7 @@ public class ReportDataServlet extends HttpServlet {
 					log.debug(" \n get 103 message  deviceId:"+deviceId );
 					log.debug("messageId:"+messageId );
 					log.debug("dataType:"+dataType );
-					log.debug("RAWDATA:"+RAWDATA );
-					log.debug("==RAWDATA byte.length:"+result1.length );
+					log.debug("data:"+data );
 			         String revokeReturnMesg="";
 			         try{
 			        	 String url="";
@@ -343,7 +342,7 @@ public class ReportDataServlet extends HttpServlet {
 		String deviceId=keyValues.get("deviceId");
 		String messageId=keyValues.get("messageId");
 		String dataType=keyValues.get("dataType");
-		String RAWDATA=keyValues.get("data");
+		String DATA=keyValues.get("data");
 		String createTime=keyValues.get("createTime");
 		
 		URIBuilder builder = new URIBuilder();
@@ -354,7 +353,7 @@ public class ReportDataServlet extends HttpServlet {
 		.setParameter("deviceId",deviceId)//默认执行encoding的操作
 		.setParameter("messageId",messageId)
 		.setParameter("dataType",dataType)
-		.setParameter("data",RAWDATA);
+		.setParameter("data",DATA);
 
 		URI uri = builder.build();
 		HttpGet httpget = new HttpGet(uri);
@@ -477,7 +476,7 @@ public class ReportDataServlet extends HttpServlet {
 		return mesg;
 	}
 	
-	private String sendDATA101(String deviceId,String messageId,String dataType,String createTime,String data) throws Exception {
+	private String sendDATA101(String deviceId,String messageId,String dataType,String createTime,String dataArg) throws Exception {
 		long x1 = System.currentTimeMillis();
 		
 		// 定义data101
@@ -499,31 +498,32 @@ public class ReportDataServlet extends HttpServlet {
 		String hxJiao;//航向角
 		String hgJiao;//横滚角 
 
-		DataTypeID = EncodeUtils.bytesToInt1(EncodeUtils.splitBytesArray(result1, 0, 1));
-		Date = EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 1, 4));
-		Ax = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 5, 4)));
-		Ay = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 9, 4)));
-		Az = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 13, 4)));
-		Wx = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 17, 4)));
-		Wy = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 21, 4)));
-		Wz = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 25, 4)));
-		Tx = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 29, 4)));
-		Ty = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 33, 4)));
-		Tz = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 37, 4)));
-		GPSX = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 41, 4)));
-		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
-		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
-		if(result1.length<=53){//老格式的数据没有后面的3个字段，是53个字节
+		String[] temp=dataArg.split(",");
+		DataTypeID = Integer.parseInt(temp[0]);
+		Date = Integer.parseInt(temp[1]);;
+		Ax = formatData( Integer.parseInt(temp[2]));
+		Ay = formatData( Integer.parseInt(temp[3]));
+		Az = formatData( Integer.parseInt(temp[4]));
+		Wx = formatData( Integer.parseInt(temp[5]));
+		Wy = formatData( Integer.parseInt(temp[6]));
+		Wz = formatData( Integer.parseInt(temp[7]));
+		Tx = formatData( Integer.parseInt(temp[8]));
+		Ty = formatData( Integer.parseInt(temp[9]));
+		Tz = formatData( Integer.parseInt(temp[10]));
+		GPSX = formatData6( Integer.parseInt(temp[11]));
+		GPSY = formatData6( Integer.parseInt(temp[12]));
+		Speed = formatData( Integer.parseInt(temp[13]));
+		if(temp.length<=17){//老格式的数据没有后面的3个字段，是14个字段
 			fyJiao ="500";//3个角度默认值：500
 			hgJiao = "500";
 			hxJiao ="500";
-		}else{//新格式的数据是65个字节，加了3个字段，每个字段4个字节
-			fyJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
-			hgJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
-			hxJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 61, 4)));
+		}else{//新格式的数据是17个字段，加了3个字段
+			fyJiao = temp[14];
+			hgJiao =temp[15];
+			hxJiao =temp[16];
 		}
 		long x2 = System.currentTimeMillis();
-		log.debug("==sendRAWDATA101_bytesToInt cost(ms)："+(x2-x1));
+		log.debug("==sendDATA101_splitData cost(ms)："+(x2-x1));
 		
 		StringBuilder sb2 = new StringBuilder();
 		sb2.append(DataTypeID + ",");
@@ -545,17 +545,10 @@ public class ReportDataServlet extends HttpServlet {
 		sb2.append(hxJiao);// 最后一个不要加 ;
 
 		String data = sb2.toString();
-
-//		StringBuilder sb = new StringBuilder();
-//		for (int i = 0; i < result1.length && i < 53; i++) {
-//			sb.append("[" + i + "]:" + EncodeUtils.byteToInt(result1[i]));
-//			sb.append("\n");
-//		}
-//		log.debug("每个byte打印后的值：\n"+sb.toString());
 		
 		String mesg = deviceId + ";" + messageId + ";" + dataType + ";" + data + ";" + createTime;
 		String partitionKey=deviceId;
-		log.debug("sendRAWDATA101_reportData101 mesg:" + mesg); 
+		log.debug("sendDATA101_reportData101 mesg:" + mesg); 
 		
 //		LinkedHashMap<String, String> dataMap = new LinkedHashMap<String, String>();
 //		dataMap.put("partitionKey", deviceId);
@@ -570,7 +563,7 @@ public class ReportDataServlet extends HttpServlet {
 		
 		long x4= System.currentTimeMillis();
 		
-		log.debug("==sendRAWDATA101_sendToKafka cost(ms) ："+(x4-x3));
+		log.debug("==sendDATA101_sendToKafka cost(ms) ："+(x4-x3));
 		
 		//测试消息是否有序
 		//Map<String, Object> rtnMap =RedisClient.testOrder(deviceId, "ReportDataServlet",String.valueOf(Date));
