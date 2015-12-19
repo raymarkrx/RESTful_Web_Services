@@ -54,8 +54,8 @@ public class testServlet_data101_batch {
         	//String deviceId     =i%2==0?"+86test_1":"+86test_2";
         	//String deviceId  ="test8618616969935"+rand.nextInt(99); 352273017386360 
         	
-        	String deviceId  =DEFAULT_TEST;//deviceId字段
-        	//String deviceId  ="352273017386360";//deviceId字段
+        	//String deviceId  =DEFAULT_TEST;//deviceId字段
+        	String deviceId  ="352273017386360";//deviceId字段
  			String messageId="0";//递增的序列
  			String dataType="2";//2:表示base64编码后的数据 ，1：表示值透传，无编码传过来
  			String data;//这个字段由下面的字段构成
@@ -127,7 +127,7 @@ public class testServlet_data101_batch {
 	         //调用webService
 	         revokeServletData101(keyValues);
         	
-        	Thread.sleep(10*1);
+        	Thread.sleep(1000*1);
         } 
         
         //System.out.println("=====================OVER================");
