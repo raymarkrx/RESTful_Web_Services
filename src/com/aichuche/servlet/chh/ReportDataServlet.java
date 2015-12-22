@@ -232,7 +232,7 @@ public class ReportDataServlet extends HttpServlet {
 //					log.debug("101 message OVER:" );
 					synchronized (obj) {
 						 log.debug("字节数组长度："+result1.length);
-						//printRAWDATA101(result1);
+						printRAWDATA101(result1);
 						long a1=System.currentTimeMillis(); 
 						data=sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
 						long a2=System.currentTimeMillis(); 
@@ -469,7 +469,7 @@ public class ReportDataServlet extends HttpServlet {
 		
 		return mesg;
 	}
-	
+	//值透传的情况
 	private String sendDATA101(String deviceId,String messageId,String dataType,String createTime,String dataArg) throws Exception {
 		long x1 = System.currentTimeMillis();
 		
@@ -615,9 +615,9 @@ public class ReportDataServlet extends HttpServlet {
 		GPSY = formatData6(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 45, 4)));
 		Speed = formatData(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 49, 4)));
 		if(result1.length<=53){//老格式的数据没有后面的3个字段，是53个字节
-			fyJiao = "0";
-			hgJiao ="0";
-			hxJiao ="0";
+			fyJiao ="500";//3个角度默认值：500
+			hgJiao = "500";
+			hxJiao ="500";
 		}else{//新格式的数据是65个字节，加了3个字段，每个字段4个字节
 			fyJiao = String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 53, 4)));
 			hgJiao =String.valueOf(EncodeUtils.bytesToInt4(EncodeUtils.splitBytesArray(result1, 57, 4)));
@@ -625,20 +625,20 @@ public class ReportDataServlet extends HttpServlet {
 		}
 
 		
-		 log.debug("解码后,第0个字节："+ DataTypeID );
-		 log.debug("解码后,第1-4个字节："+ Date );
-		 log.debug("解码后,第5-8个字节："+ Ax );
-		 log.debug("解码后,第9-12个字节："+ Ay );
-		 log.debug("解码后,第13-16个字节："+Az );
-		 log.debug("解码后,第17-20个字节："+Wx );
-		 log.debug("解码后,第21-24个字节："+Wy );
-		 log.debug("解码后,第25-28个字节："+Wz );
-		 log.debug("解码后,第29-32个字节："+Tx );
-		 log.debug("解码后,第33-36个字节："+Ty );
-		 log.debug("解码后,第37-40个字节："+Tz );
+		 log.debug("解码后,第0个字节(DataTypeID)："+ DataTypeID );
+		 log.debug("解码后,第1-4个字节(unix时间戳)："+ Date );
+		 log.debug("解码格式化后,第5-8个字节(Ax)："+ Ax );
+		 log.debug("解码格式化后,第9-12个字节(Ay)："+ Ay );
+		 log.debug("解码格式化后,第13-16个字节(Az)："+Az );
+		 log.debug("解码格式化后,第17-20个字节(Wx)："+Wx );
+		 log.debug("解码格式化后,第21-24个字节(Wy)："+Wy );
+		 log.debug("解码格式化后,第25-28个字节(Wz)："+Wz );
+		 log.debug("解码格式化后,第29-32个字节(Tx)："+Tx );
+		 log.debug("解码格式化后,第33-36个字节(Ty)："+Ty );
+		 log.debug("解码格式化后,第37-40个字节(Tz)："+Tz );
 		log.debug("解码格式化后,第41-44个字节(GPSX)：" + GPSX);
 		log.debug("解码格式化后,第45-48个字节(GPSY)：" + GPSY);
-		 log.debug("解码后,第49-52个字节："+ Speed );
+		 log.debug("解码格式化后,第49-52个字节(Speed)："+ Speed );
 		log.debug("解码后,第53-56个字节(fyJiao)：" + fyJiao);
 		log.debug("解码后,第57-60个字节(hgJiao)：" + hgJiao);
 		 log.debug("解码后,第61-64个字节(hxJiao)："+ hxJiao );
