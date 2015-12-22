@@ -647,7 +647,7 @@ public class ReportDataServlet extends HttpServlet {
 	}
 	
 	private void printRAWDATA101ToHex(byte[] result1) throws IOException {
-		PrintUtils.print("16进制打印数组:"+bytesToHexString(result1));
+		PrintUtils.print("16进制打印数组 :\n"+bytesToHexString(result1));
 	}
 	
     /**
@@ -661,6 +661,7 @@ public class ReportDataServlet extends HttpServlet {
             return null;
         }
         for (int i = 0; i < src.length; i++) {
+        	stringBuilder.append(i+":");
             int v = src[i] & 0xFF;
             String hv = Integer.toHexString(v);
             if (hv.length() < 2) {
