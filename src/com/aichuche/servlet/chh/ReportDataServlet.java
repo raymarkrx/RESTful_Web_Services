@@ -232,6 +232,7 @@ public class ReportDataServlet extends HttpServlet {
 //					log.debug("101 message OVER:" );
 					synchronized (obj) {
 						 log.debug("字节数组长度："+result1.length);
+						 printRAWDATA101ToHex(result1);
 						printRAWDATA101(result1);
 						long a1=System.currentTimeMillis(); 
 						data=sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
@@ -644,5 +645,57 @@ public class ReportDataServlet extends HttpServlet {
 		 log.debug("解码后,第61-64个字节(hxJiao)："+ hxJiao );
 
 	}
+	
+	private void printRAWDATA101ToHex(byte[] result1) throws IOException {
+		PrintUtils.print("16进制打印数组:"+bytesToHexString(result1));
+	}
+	
+    /**
+     * Convert byte[] to hex string.这里我们可以将byte转换成int，然后利用Integer.toHexString(int)来转换成16进制字符串。
+     * @param src byte[] data
+     * @return hex string
+     */   
+    public  String bytesToHexString(byte[] src){
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        for (int i = 0; i < src.length; i++) {
+            int v = src[i] & 0xFF;
+            String hv = Integer.toHexString(v);
+            if (hv.length() < 2) {
+                stringBuilder.append(0);
+            }
+            stringBuilder.append(hv.toUpperCase()+"\n");
+        }
+        return stringBuilder.toString();
+    }
+    /**
+     * Convert hex string to byte[]
+     * @param hexString the hex string
+     * @return byte[]
+     */
+    public  byte[] hexStringToBytes(String hexString) {
+        if (hexString == null || hexString.equals("")) {
+            return null;
+        }
+        hexString = hexString.toUpperCase();
+        int length = hexString.length() / 2;
+        char[] hexChars = hexString.toCharArray();
+        byte[] d = new byte[length];
+        for (int i = 0; i < length; i++) {
+            int pos = i * 2;
+            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+        }
+        return d;
+    }
+    /**
+     * Convert char to byte
+     * @param c char
+     * @return byte
+     */
+     private byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
+    }
 
 }
