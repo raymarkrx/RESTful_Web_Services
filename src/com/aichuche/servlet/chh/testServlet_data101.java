@@ -38,7 +38,7 @@ public class testServlet_data101 {
         a.add("3,30");//s5
         
         Random rand = new Random();
-        for(int i=0;i<4;i=i+1){
+        for(int i=0;i<1;i=i+1){
         	int j=i%a.size();
         	String b=a.get(j);
         	String[] c=b.split(",");
@@ -46,8 +46,9 @@ public class testServlet_data101 {
         	String ax=c[1];
         	//PrintUtils.print(j+","+ax+","+speed);
         	
+        	String yyyyMMddHHmmss=DateUtils.getNextWorkDayByOffset(DateUtils.getDate2(),-1);
         	//String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromCurrentDate());//yyyyMMddHHmmss
-        	String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromLocalTimeDate2("20151224134226"));//20151224134226
+        	String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromLocalTimeDate2(yyyyMMddHHmmss));//20151224134226
         	String currentDate=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getLocalTimeDateFromUnixTimestamp(currentDateUnixTimestamp));
         	
         	//发送的消息由5个字段构成（deviceId，messageId，dataType，data（由明细字段生成），createTime）

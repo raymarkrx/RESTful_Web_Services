@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import chh.utils.DateUtils;
 
 import com.aichuche.servlet.chh.testServlet_data101;
 
@@ -39,6 +38,12 @@ public class DateUtils {
      */
     public static String getDate() {
  SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+
+ return formatter.format(new Date());
+    }
+    
+    public static String getDate2() {
+ SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 
  return formatter.format(new Date());
     }
@@ -111,6 +116,12 @@ public class DateUtils {
      */
     public static String getDate(Date date) {
  SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+ return formatter.format(date);
+    }
+    
+    public static String getDate2(Date date,String pattern) {
+ SimpleDateFormat formatter = new SimpleDateFormat(pattern);
 
  return formatter.format(date);
     }
@@ -389,10 +400,9 @@ public class DateUtils {
     //得到上一天或者下一天，上几天或者下几天的工作日
     public static String getNextWorkDayByOffset(String dateStr,int offset)
     {
-//        Calendar result = null;
-        holidayFlag = false;
+
         Calendar calendar= Calendar.getInstance();  
-        calendar.setTime(DateUtils.parseHyphenDate(dateStr));
+        calendar.setTime(DateUtils.parseDate(dateStr,"yyyyMMddHHmmss"));
         for (int i = 0; i <Math.abs( offset); i++)
         {
             //把源日期加一天
@@ -401,14 +411,9 @@ public class DateUtils {
         	}else{
         		calendar.add(Calendar.DAY_OF_MONTH, -1);
         	}
-            holidayFlag =checkHoliday(calendar);
-            if(holidayFlag)
-            {
-               i--;
-            }
-            //System.out.println(calendar.getTime());
+
         }
-        return  DateUtils.getDate(calendar.getTime());
+        return  DateUtils.getDate2(calendar.getTime(),"yyyyMMddHHmmss");
     }
 
     /**
