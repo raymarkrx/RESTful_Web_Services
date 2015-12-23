@@ -46,8 +46,8 @@ public class testServlet_data101 {
         	String ax=c[1];
         	//PrintUtils.print(j+","+ax+","+speed);
         	
-        	String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromCurrentDate());//yyyyMMddHHmmss
-        	//String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromLocalTimeDate2("20151224134226"));//20151224134226
+        	//String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromCurrentDate());//yyyyMMddHHmmss
+        	String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromLocalTimeDate2("20151224134226"));//20151224134226
         	String currentDate=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getLocalTimeDateFromUnixTimestamp(currentDateUnixTimestamp));
         	
         	//发送的消息由5个字段构成（deviceId，messageId，dataType，data（由明细字段生成），createTime）
