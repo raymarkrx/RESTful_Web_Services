@@ -46,7 +46,7 @@ public class testServlet_data101 {
         	String ax=c[1];
         	//PrintUtils.print(j+","+ax+","+speed);
         	
-        	String yyyyMMddHHmmss=DateUtils.getNextWorkDayByOffset(DateUtils.getDate2(),-1);
+        	String yyyyMMddHHmmss=DateUtils.getNextWorkDayByOffset(DateUtils.getDate2(),-3);
         	//String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromCurrentDate());//yyyyMMddHHmmss
         	String currentDateUnixTimestamp   =String.valueOf(DateUtils.getUnixTimestampFromLocalTimeDate2(yyyyMMddHHmmss));//20151224134226
         	String currentDate=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getLocalTimeDateFromUnixTimestamp(currentDateUnixTimestamp));
