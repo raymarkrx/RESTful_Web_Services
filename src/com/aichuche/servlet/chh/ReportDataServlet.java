@@ -74,11 +74,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import chh.utils.db.source.DataSourceProvider;
 import chh.utils.db.source.common.ConnectionProvider;
-import chh.utils.mysql.MysqlClient;
+import chh.utils.mysql.MysqlClient; 
 
 import com.aichuche.servlet.LogStoreServiceImpl;
 import com.aichuche.util.UtilData;
-import com.chh.utils.C3P0Utils;
+import com.chh.utils.C3P0Utils; 
 import com.chh.utils.Constants;
 import com.chh.utils.DateUtils;
 import com.chh.utils.HttpUtil;
@@ -87,6 +87,8 @@ import com.chh.utils.PrintUtils;
 import com.chh.utils.PropertiesUtils;
 import com.chh.utils.encoding.EncodeUtils;
 import com.redis.RedisClient;
+
+
 
 public class ReportDataServlet extends HttpServlet {
 
@@ -160,10 +162,13 @@ public class ReportDataServlet extends HttpServlet {
 
 		String deviceId = request.getParameter("deviceId");
 		String messageId = request.getParameter("messageId");
-		String dataType = request.getParameter("dataType");// 1=string
-															// 2=base64后的rawData
+		String dataType = request.getParameter("dataType");// 1=string,2=base64后的rawData
+		dataType="2";//有变动，现在改为按照dataType只有2的情况处理，即:不管dataType传过来的是1还是2，都按照2处理，即都进行解码操作
+		
+		PrintUtils.print("new change ,新改: "+dataType);
+		//xi
 		String data = null;
-		String RAWDATA = null;
+		String RAWDATA = null; 
 		String createTime = request.getParameter("createTime");
 		
 		int DataTypeID; // 根据这个DataTypeID判断消息的类型，发送到指定的kafka的topic
@@ -232,8 +237,8 @@ public class ReportDataServlet extends HttpServlet {
 //					log.debug("101 message OVER:" );
 					synchronized (obj) {
 						 log.debug("字节数组长度："+result1.length);
-						 printRAWDATA101ToHex(result1);
-						printRAWDATA101(result1);
+						 //printRAWDATA101ToHex(result1);
+						//printRAWDATA101(result1);
 						long a1=System.currentTimeMillis(); 
 						data=sendRAWDATA101(deviceId,messageId,dataType,createTime,result1);//处理data101的消息
 						long a2=System.currentTimeMillis(); 

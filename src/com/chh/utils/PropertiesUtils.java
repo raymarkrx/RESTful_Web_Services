@@ -62,8 +62,6 @@ public class PropertiesUtils
 			      keyValues.put("redisPort", redisPort);
 			      
 			      
-			      
-			      
 			      properties.clear();
 		    		 
 		    	 }
